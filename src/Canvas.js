@@ -2,11 +2,10 @@ import React from 'react';
 import { Stage, Layer, Rect } from 'react-konva';
 
 const Canvas = () => {
-  // This is placeholder data. Eventually, you'll fetch this from your backend.
+    
   const gridData = Array(50).fill().map(() => Array(50).fill('white'));
 
   const handleCellClick = (color, i, j) => {
-    // This is where you'll handle the color change. You will need to implement this.
     console.log(`Cell at ${i}, ${j} clicked`);
   };
 
