@@ -1,126 +1,369 @@
-// Import necessary packages
-import React, { useState, useEffect } from 'react'; // React core and Hooks
-import { Stage, Layer, Rect } from 'react-konva'; // Canvas-related components from react-konva
-import Konva from 'konva'; // Konva library for 2D drawing 
-import ColorPalette from './ColorPalette'; // Import ColorPalette component
-import ColorTile from './ColorTile'; // Import ColorTile component
-import Cooldown from './Cooldown'; // Import Cooldown component
+import React, { useState, useEffect, useRef } from 'react';
+import { Stage, Layer, Rect } from 'react-konva';
+import Konva from 'konva';
+
+// Possible colors
+
+const colorPalette = [
+  "#FF4500", // Orange Red
+  "#FF8C00", // Dark Orange
+  "#FFD700", // Gold
+  "#32CD32", // Lime Green
+  "#008000", // Green
+  "#4169E1", // Royal Blue
+  "#0000FF", // Blue
+  "#8A2BE2", // Blue Violet
+  "#FF1493", // Deep Pink
+  "#C71585", // Medium Violet Red
+  "#FF69B4", // Hot Pink
+  "#FFC0CB", // Pink
+  "#800000", // Maroon
+  "#A52A2A", // Brown
+  "#808080", // Gray
+  "#FFFFFF", // White
+  "#000000" // Black
+];
 
 
-// Define pixel size, canvas dimensions, and colors
-const pixelSize = 10;
-const totalPixels = 50;
-const colors = ['blue', 'brown', 'orange', 'red', 'green', 'white', 'purple', 'lightblue', 'sandybrown', 'coral', 'lightcoral', 'lightgreen', 'white', 'plum'];
+// Canvas Pixels
+const Pixel = ({ x, y, width, height, fill }) => {
+  return <Rect x={x} y={y} width={width} height={height} fill={fill} />;
+};
 
-// Define the main App component
-function App() {
-  // Use the useState hook to initialize a scale value for zoom level
+// The highlight for a 'centered' pixel
+const Highlight = ({ x, y, width, height }) => {
+  return <Rect x={x} y={y} width={width} height={height} stroke='black' strokeWidth={2} />;
+};
 
-  const [scale, setScale] = useState(1);
-  const [tileScale, setTileScale] = useState(1);
+
+// PlaceTileButton component
+const PlaceTileButton = ({ visible, onClick }) => {
+  const styles = {
+    position: 'fixed',
+    bottom: visible ? '20px' : '-60px', // Adjust these as needed
+    left: '50%',
+    opacity: visible ? 1 : 0,
+    backgroundColor: 'gray',
+    color: 'white',
+    padding: '10px 20px',
+    borderRadius: '50px',
+    transition: 'bottom 0.5s, opacity 0.5s',
+    cursor: 'pointer',
+  };
+
+  return <div style={styles} onClick={onClick}>Place Tile</div>;
+};
+
+// Color Palette Component
+const ColorPalette = ({ colorPalette, selectedColor, handleColorSelection, showPalette }) => {
+  return (
+    <div style={{
+      position: 'fixed',
+      bottom: 20,
+      width: '80%',
+      margin: '0 10%',
+      padding: '10px 0',
+      backgroundColor: '#808080',
+      borderRadius: '50px',
+      display: 'flex',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      transition: 'opacity 0.5s, transform 0.5s',
+      opacity: showPalette ? 1 : 0,
+      transform: `translateY(${showPalette ? '0' : '100%'})`,
+      zIndex: 100
+    }}>
+      {colorPalette.map(color => (
+        <div key={color} style={{
+          width: '40px',
+          height: '40px',
+          borderRadius: '50%',
+          backgroundColor: color,
+          margin: '10px',
+          cursor: 'pointer',
+          transition: 'all 0.2s ease',
+          transform: selectedColor === color ? 'scale(1.2)' : 'scale(1)',
+        }} onClick={() => handleColorSelection(color)}></div>
+      ))}
+    </div>
+  );
+};
+
+// Add this PreviewPixel component
+const PreviewPixel = ({ x, y, width, height, fill }) => {
+  return <Rect x={x} y={y} width={width} height={height} fill={fill} />;
+};
+
+const ConfirmationButton = ({ visible, onClick, symbol, handleConfirmClick }) => {
+
+  const styles = {
+    position: 'fixed',
+    bottom: visible ? '120px' : '-60px',
+    left: symbol === '✖' ? '45%' : '55%',
+    transform: 'translateX(-50%)',
+    opacity: visible ? 1 : 0,
+    backgroundColor: 'gray',
+    color: 'white',
+    padding: '10px 50px',
+    borderRadius: '50px',
+    transition: 'bottom 0.5s, opacity 0.5s',
+    cursor: 'pointer',
+  };
+
+  const handleClick = () => {
+    handleConfirmClick(symbol);
+  };
+
+  return <div style={styles} onClick={handleClick}>{symbol}</div>;
+};
+
+// Renderign the canvas
+const Canvas = ({ width, height, rows, cols }) => {
+  const [isPixelHighlighted, setIsPixelHighlighted] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
-  const [cursorPosition, setCursorPosition] = useState({x: 0, y: 0});
-  const [tilePos, setTilePos] = useState({ x: 0, y: 0 });
-  const [tileSize, setTileSize] = useState(0);
+  const [centerPixel, setCenterPixel] = useState({x: Math.floor(cols/2), y: Math.floor(rows/2)});
+  const [highlightVisible, setHighlightVisible] = useState(true);
+  const [pixelSelected, setPixelSelected] = useState(false);
+  const [showPlaceTileButton, setShowPlaceTileButton] = useState(false);
+  const [showColorPalette, setShowColorPalette] = useState(false);
+  const [previewColor, setPreviewColor] = useState(null);
+  const [showConfirmationButtons, setShowConfirmationButtons] = useState(false);
+
+  const stageRef = useRef();
+
+  // Generate stage pixels
+  const [pixels, setPixels] = useState(() => {
+    const pixels = [];
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < cols; j++) {
+        const color = `${colorPalette[(Math.floor(Math.random() * colorPalette.length))]}`;
+        pixels.push({
+          x: j,
+          y: i,
+          color
+        });
+      }
+    }
+    return pixels;
+  });
+
+  const handleConfirmClick = (symbol) => {
+    if (symbol === '✖') {
+      console.log('✖ button clicked');
+      handleCancelSelection();
+    } else if (symbol === '✔') {
+      // Logic for the '✔' button
+      console.log('✔ button clicked');
+      // Add your specific behavior for the '✔' button here
+      setPixels(prevPixels => prevPixels.map(pixel => 
+        pixel.x === centerPixel.x && pixel.y === centerPixel.y ? { ...pixel, color: selectedColor } : pixel
+      ));
+
+      // TODO: Update database here with the new color for the pixel at `centerPixel.x` and `centerPixel.y`
+
+      handleCancelSelection(); // Reset the selection
+    }
+  };
+
+  // Handling the change of the center pixel, handleDragMove will constantly ask for updateCenterPixel
+  const handleDragMove = e => {
+    if (pixelSelected) return;
+    const stage = e.target.getStage();
+    updateCenterPixel(stage);
+  };
+
+  // New function for color selection
+  const handleColorSelection = color => {
+    setSelectedColor(color);
+    setPreviewColor(color);
+    setShowConfirmationButtons(true);
+  };
+
+  // Updating the highlighted pixel in the center of the screen
+  const updateCenterPixel = (stage) => {
+    const scale = stage.scaleX();
+    const newPos = {x: -stage.x() / scale, y: -stage.y() / scale};
+    const center = {x: newPos.x + stage.width() / 2 / scale, y: newPos.y + stage.height() / 2 / scale};
+    const centerPixel = {x: Math.floor(center.x / width), y: Math.floor(center.y / height)};
+    setCenterPixel(centerPixel);
+
+    if (centerPixel.x >= 0 && centerPixel.x < cols && centerPixel.y >= 0 && centerPixel.y < rows) {
+      setShowPlaceTileButton(true);
+      setHighlightVisible(true);
+    }
+    else {
+      setShowPlaceTileButton(false);
+      setHighlightVisible(false);
+    }
+  };
+
+  // Modify handlePlaceTile to set pixelSelected to true and start the zoom tween
+  const handleSelectTile = () => {
+    setPixelSelected(true);
   
-  // Use the useState hook to initialize an empty array for the colors of each pixel
-  const [pixelColors, setPixelColors] = useState([]);
+    const stage = stageRef.current;
+    const scale = 5;
+    const x = centerPixel.x * width * scale - stage.width() / 2 + width / 2 * scale; // Added width adjustment
+    const y = centerPixel.y * height * scale - stage.height() / 2 + height / 2 * scale; // Added height adjustment
+  
+    if (stage.tween) {
+      stage.tween.destroy();
+    }
+  
+    stage.tween = new Konva.Tween({
+      node: stage,
+      duration: 2,
+      scaleX: scale,
+      scaleY: scale,
+      x: -x,
+      y: -y,
+      easing: Konva.Easings.EaseInOut,
+      onFinish: () => {
+        stage.tween = null;
+      }
+    });
+    stage.tween.play();
+  
+    setShowPlaceTileButton(false);
+    setShowColorPalette(true);
+  };
 
-  // State to handle selected color
-  //const [selectedColor, setSelectedColor] = useState('');  // Add this line
+  // Handle canceling when having had selected a pixel to change
+  const handleCancelSelection = () => {
 
-  // Use the useEffect hook to run once when the component mounts
-  useEffect(() => {
-    // Define a function to get a random color from the colors array
-    const getRandomColor = () => {
-      return colors[Math.floor(Math.random() * colors.length)];
+    // Remove the preview tile
+    setPreviewColor(null);
+
+    // Find the new bounds for the canvas, zooming out a little bit at scale 4
+    const stage = stageRef.current;
+    const scale = 4;
+    const x = centerPixel.x * width * scale - stage.width() / 2 + width / 2 * scale; // Added width adjustment
+    const y = centerPixel.y * height * scale - stage.height() / 2 + height / 2 * scale; // Added height adjustment
+    
+    if (stage.tween) {
+      stage.tween.destroy();
     }
 
-    // Generate a 2D array filled with random colors
-    const initialColors = Array(totalPixels).fill(0).map(() => Array(totalPixels).fill(0).map(() => getRandomColor()));
-    
-    // Use the setPixelColors function to update the state with the new colors
-    setPixelColors(initialColors);
-  }, []);
+    // Create animation for zooming out after canceling
+    stage.tween = new Konva.Tween({
+      node: stage,
+      duration: 0.75,
+      scaleX: scale,
+      scaleY: scale,
+      x: -x,
+      y: -y,
+      easing: Konva.Easings.EaseInOut,
+      onFinish: () => {
+        setPixelSelected(false); 
+        stage.tween = null;
+      }
+    });
+    stage.tween.play();
+  
+    // Remove palette and confirmation buttons, and bring back place tile button
+    setShowPlaceTileButton(true);
+    setShowColorPalette(false);
+    setShowConfirmationButtons(false);
+  }
 
-  // Define a function to handle wheel events (for zooming in and out)
-  const handleWheel = (e) => {
-    e.evt.preventDefault(); // Prevent the default scroll behavior
-  
-    const scaleBy = 2.1; // Set a constant to define the rate of scaling
-    const stage = e.target.getStage(); // Get the current stage object
-    const oldScale = stage.scaleX(); // Get the current scale
-  
-    const pointerPosition = stage.getPointerPosition(); // Get the current position of the pointer
-  
-    // Calculate the current position relative to the stage
+
+  // Handle zooming from mousewheel on desktop
+  const handleWheel = e => {
+    if (pixelSelected) return;
+    e.evt.preventDefault();
+
+    const scaleBy = 1.75;
+    const stage = e.target.getStage();
+    const oldScale = stage.scaleX();
+
+    const pointerPosition = stage.getPointerPosition();
+
     const mousePointTo = {
       x: (pointerPosition.x - stage.x()) / oldScale,
       y: (pointerPosition.y - stage.y()) / oldScale,
-    };
-  
-    // Calculate the new scale based on the wheel direction
-    let newScale = e.evt.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy;
+    }; 
 
-    // Limit the zoom level to a range between 1 and 5
-    newScale = Math.max(1, Math.min(newScale, 5));
+    let newScale = e.evt.deltaY < 0 ? oldScale * scaleBy : oldScale / scaleBy;
 
-    // Calculate the new position after scaling
+    // Limit the scale
+    if (newScale > 4.5) newScale = 5; // Max scale
+    if (newScale < 2) newScale = 1.5; // Min scale
+
     const newPos = {
       x: pointerPosition.x - mousePointTo.x * newScale,
       y: pointerPosition.y - mousePointTo.y * newScale,
     };
 
-    // Send the new size to the ColorTile
-    setTileScale(newScale);
-  
-    // Create a new Tween to animate the zooming effect
-    new Konva.Tween({
-      node: stage, // Apply the animation to the stage
-      scaleX: newScale, // Set the new scale
-      scaleY: newScale, // Keep x and y scale equal to maintain aspect ratio
-      x: newPos.x, // Set the new x position
-      y: newPos.y, // Set the new y position
-      duration: 0.20, // Set the duration of the animation
-    }).play(); // Start the animation
+    // Create a new tween if none exists, else update existing one
+    if (stage.tween) {
+      stage.tween.destroy();
+    }
 
+    stage.tween = new Konva.Tween({
+      node: stage,
+      duration: 0.2,
+      scaleX: newScale,
+      scaleY: newScale,
+      x: newPos.x,
+      y: newPos.y,
+      onFinish: () => {
+        stage.tween = null;
+      }
+    });
+    stage.tween.play();
+
+    updateCenterPixel(stage);
   };
 
-  // Add this function to handle color selection
-  const handleColorSelect = (color) => {
-    setSelectedColor(color);
-  };
-  
-  // Render the component
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (stage) {
+      updateCenterPixel(stage);
+    }
+  }, []);
+
+  // Update isPixelHighlighted when centerPixel changes
+  useEffect(() => {
+    setIsPixelHighlighted(centerPixel.x >= 0 && centerPixel.x < cols && centerPixel.y >= 0 && centerPixel.y < rows);
+  }, [centerPixel]);
+
   return (
     <div>
-      <Stage 
-        width={window.innerWidth} 
-        height={window.innerHeight} 
-        scaleX={scale} 
-        scaleY={scale} 
-        draggable 
+      <Stage
+        width={window.innerWidth}
+        height={window.innerHeight}
+        draggable={!pixelSelected}
+        onDragMove={handleDragMove}
         onWheel={handleWheel}
+        ref={stageRef}
       >
-        <Layer>
-          {pixelColors.map((row, i) => row.map((color, j) => (
-            <Rect
-              key={`${i},${j}`}
-              x={i * pixelSize}
-              y={j * pixelSize}
-              width={pixelSize+1}
-              height={pixelSize+1}
-              // Assign color from state
-              fill={color}  
-              // TODO: Replace color with the color retrieved from database
-            />
-          )))}
+         <Layer>
+          {pixels.map((pixel, index) => 
+            <Pixel key={index} x={pixel.x * width} y={pixel.y * height} width={width+0.5} height={height+0.5} fill={pixel.color} />
+          )}
+          {previewColor && <PreviewPixel x={centerPixel.x * width} y={centerPixel.y * height} width={width} height={height} fill={previewColor} />}
+          {highlightVisible && <Highlight x={centerPixel.x * width} y={centerPixel.y * height} width={width} height={height} />}
         </Layer>
       </Stage>
-      <ColorPalette selectedColor={selectedColor} onColorSelect={handleColorSelect} />
-      <ColorTile selectedColor={selectedColor} scale={tileScale} />      
+      <PlaceTileButton visible={showPlaceTileButton} onClick={handleSelectTile} />
+      <ColorPalette colorPalette={colorPalette} handleColorSelection={handleColorSelection} showPalette={showColorPalette}/>  
+      <ConfirmationButton visible={showConfirmationButtons} handleConfirmClick={handleConfirmClick} symbol="✖" />
+      <ConfirmationButton visible={showConfirmationButtons} handleConfirmClick={handleConfirmClick} symbol="✔" />
+    </div>
+  );
+};
+const App = () => {
+  const pixelSize = 11;
+  const rows = 50;
+  const cols = 50;
+
+  return (
+    <div>
+      <Canvas width={pixelSize} height={pixelSize} rows={rows} cols={cols} />
     </div>
   );
 }
 
-export default App; // Export the App component
+export default App;
