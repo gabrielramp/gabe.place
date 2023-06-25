@@ -38,14 +38,16 @@ const Highlight = ({ x, y, width, height }) => {
 
 // PlaceTileButton component
 const PlaceTileButton = ({ visible, onClick }) => {
+  const isMobile = window.innerWidth <= 760;
+
   const styles = {
     position: 'fixed',
-    bottom: visible ? '20px' : '-60px', // Adjust these as needed
+    bottom: visible ? isMobile ? '20px' : '20px' : '-60px', // Adjust these as needed
     left: '50%',
     opacity: visible ? 1 : 0,
     backgroundColor: 'gray',
     color: 'white',
-    padding: '10px 20px',
+    padding: isMobile ? '15px 20px' : '10px 20px',
     borderRadius: '50px',
     transition: 'bottom 0.5s, opacity 0.5s',
     cursor: 'pointer',
@@ -56,13 +58,15 @@ const PlaceTileButton = ({ visible, onClick }) => {
 
 // Color Palette Component
 const ColorPalette = ({ colorPalette, selectedColor, handleColorSelection, showPalette }) => {
+  const isMobile = window.innerWidth <= 768;
+
   return (
     <div style={{
       position: 'fixed',
       bottom: 20,
       width: '80%',
       margin: '0 10%',
-      padding: '10px 0',
+      padding: isMobile ? '5px 0' : '10px 0',
       backgroundColor: '#808080',
       borderRadius: '50px',
       display: 'flex',
@@ -77,11 +81,11 @@ const ColorPalette = ({ colorPalette, selectedColor, handleColorSelection, showP
     }}>
       {colorPalette.map(color => (
         <div key={color} style={{
-          width: '40px',
-          height: '40px',
+          width: isMobile ? '24px' : '40px',  // Adjust for mobile
+          height: isMobile ? '24px' : '40px', // Adjust for mobile
           borderRadius: '50%',
           backgroundColor: color,
-          margin: '10px',
+          margin: isMobile ? '6px' : '10px',  // Adjust for mobile
           cursor: 'pointer',
           transition: 'all 0.2s ease',
           transform: selectedColor === color ? 'scale(1.2)' : 'scale(1)',
@@ -90,25 +94,33 @@ const ColorPalette = ({ colorPalette, selectedColor, handleColorSelection, showP
     </div>
   );
 };
-
 // Add this PreviewPixel component
 const PreviewPixel = ({ x, y, width, height, fill }) => {
   return <Rect x={x} y={y} width={width} height={height} fill={fill} />;
 };
 
 const ConfirmationButton = ({ visible, onClick, symbol, handleConfirmClick }) => {
+  const isMobile = window.innerWidth <= 768;
 
   const styles = {
     position: 'fixed',
     bottom: visible ? '120px' : '-60px',
-    left: symbol === '✖' ? '45%' : '55%',
-    transform: 'translateX(-50%)',
+    left: symbol === '✖' ? isMobile ? '40%' : '45%' : isMobile ? '63.5%' : '55%',  // Adjust the positions for mobile
+    transform: isMobile 
+      ? symbol === '✖' 
+        ? visible 
+          ? 'translateX(-80%)' 
+          : 'translateX(-50%)'
+        : visible 
+          ? 'translateX(-30%)' 
+          : 'translateX(-50%)'
+      : 'translateX(-50%)',
     opacity: visible ? 1 : 0,
     backgroundColor: 'gray',
     color: 'white',
     padding: '10px 50px',
     borderRadius: '50px',
-    transition: 'bottom 0.5s, opacity 0.5s',
+    transition: 'bottom 0.5s, top 0.5s, opacity 0.5s, transform 0.5s',  // Include 'transform' in the transition
     cursor: 'pointer',
   };
 
@@ -118,6 +130,10 @@ const ConfirmationButton = ({ visible, onClick, symbol, handleConfirmClick }) =>
 
   return <div style={styles} onClick={handleClick}>{symbol}</div>;
 };
+
+
+
+
 
 // Renderign the canvas
 const Canvas = ({ width, height, rows, cols }) => {
@@ -324,22 +340,34 @@ const Canvas = ({ width, height, rows, cols }) => {
     }
   }, []);
 
+
   // Update isPixelHighlighted when centerPixel changes
   useEffect(() => {
     setIsPixelHighlighted(centerPixel.x >= 0 && centerPixel.x < cols && centerPixel.y >= 0 && centerPixel.y < rows);
   }, [centerPixel]);
+
+  const calculateInitialPosition = (width, height, rows, cols) => {
+    const x = (window.innerWidth - cols * width) / 2;
+    const y = (window.innerHeight - rows * height) / 2;
+  
+    return { x, y };
+  };  
+
+  const initialPosition = calculateInitialPosition(width, height, rows, cols);
 
   return (
     <div>
       <Stage
         width={window.innerWidth}
         height={window.innerHeight}
+        x={initialPosition.x}
+        y={initialPosition.y}
         draggable={!pixelSelected}
         onDragMove={handleDragMove}
         onWheel={handleWheel}
         ref={stageRef}
       >
-         <Layer>
+        <Layer>
           {pixels.map((pixel, index) => 
             <Pixel key={index} x={pixel.x * width} y={pixel.y * height} width={width+0.5} height={height+0.5} fill={pixel.color} />
           )}
@@ -354,13 +382,16 @@ const Canvas = ({ width, height, rows, cols }) => {
     </div>
   );
 };
+
 const App = () => {
   const pixelSize = 11;
   const rows = 50;
   const cols = 50;
 
   return (
-    <div>
+    <div style={{
+      backgroundColor: '#1f1f1f'
+    }}>
       <Canvas width={pixelSize} height={pixelSize} rows={rows} cols={cols} />
     </div>
   );
