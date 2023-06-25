@@ -1,0 +1,124 @@
+@font-face {
+    font-family: 'Roboto-Medium';
+    src: url('./fonts/Roboto-Medium.ttf') format('truetype'),
+         url('./fonts/Roboto-Medium.woff') format('woff');
+  }
+
+  .close-button-container {
+    position: absolute;
+    top: 1em;
+    right: 20em;
+    z-index: 1; /* Ensure the close button is on top of other content */
+  }
+
+  .modal-content {
+    position: relative;
+    overflow: auto;
+  }
+  
+  /* Position and size of the close button */
+  .modal-content .close-button-container {
+    position: absolute;
+    top: 0.8em; /* Adjust the top position as needed */
+    right: 0.8em; /* Adjust the right position as needed */
+    z-index: 1;
+    transform: scale(1.2)
+  }
+  
+
+.modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1;  /* add this line */
+    border-bottom: 1px solid transparent;
+  }
+  
+  .show-modal {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .hide-modal {
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .modal-content {
+    background: #000a1c;
+    color: #fff;
+    padding: 2em;
+    width: 80%;
+    max-width: 600px;
+    text-align: left;
+    border-radius: 15px;
+    overflow: auto;
+}
+
+  
+  .close-button {
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .social-icons {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1em;
+    margin-top: -0.4em;
+  }
+  
+  .social-icons a:first-child {
+    margin-left: -0.1em;
+  }
+  
+  .social-icons img {
+    width: 24px;
+    height: 24px;
+    margin-right: 0.5em;
+  }
+  
+  .modal-content .header1 {
+    font-size: 2.5em;
+    margin-left: -0.05em;
+    margin-top: -0.5em; /* Adjust the top margin of the header text */
+  }
+
+  /* Header flavor text */
+  .modal-content .flavor1 {
+    margin-top: -1.3em;
+    margin-bottom: 2em;
+  }
+
+  /* Change the color of all body texts */
+  .modal-content p {
+    color: #b0b0b0;
+  }
+
+  body {
+    overflow: hidden;
+  }
+
+  .modal-content .header2 {
+    margin-left: -0.2em;
+    margin-top: 0em;
+  }
+
+  .modal-content .body2 {
+    margin-bottom: 0em;
+    margin-top: -0.5em;
+  }
+  
+  .modal-content .body3 {
+    margin-bottom: 0em;
+    margin-top: 1em;
+  }

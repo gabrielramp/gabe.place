@@ -1,0 +1,15 @@
+.navbar {
+  display: flex;
+  justify-content: space-evenly;
+  background-color: #000a1c;
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.nav-item {
+  color: white;
+  text-decoration: underline;
+  padding: 5px;
+}
