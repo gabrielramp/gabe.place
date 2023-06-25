@@ -42,7 +42,7 @@ const PlaceTileButton = ({ visible, onClick }) => {
   const styles = {
     position: 'fixed',
     bottom: visible ? isMobile ? '20px' : '20px' : '-60px', // Adjust these as needed
-    left: '47.3%',
+    left: '50%',
     opacity: visible ? 1 : 0,
     backgroundColor: '#000a1c',
     color: 'white',
@@ -50,7 +50,8 @@ const PlaceTileButton = ({ visible, onClick }) => {
     borderRadius: '50px',
     transition: 'bottom 0.5s, opacity 0.5s',
     cursor: 'pointer',
-  };
+    transform: 'translateX(-50%)',
+    };
 
   return <div style={styles} onClick={onClick}>Place Tile</div>;
 };
@@ -63,36 +64,59 @@ const ColorPalette = ({ colorPalette, selectedColor, handleColorSelection, showP
     <div style={{
       position: 'fixed',
       bottom: 20,
-      width: '60%',
-      margin: '0 20%',
-      padding: isMobile ? '5px 0' : '20px 0',
+      width: isMobile ? '80%' : '60%', // Make full width on mobile (minus padding)
+      margin: isMobile ? '0 5%' : '0 20%', // Center on larger screens
+      padding: isMobile ? '25px 20px' : '10px 0', // Increase vertical padding on mobile
       backgroundColor: '#000a1c',
       borderRadius: '50px',
       display: 'flex',
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
+      justifyContent: isMobile ? 'null' : 'center',
       alignItems: 'center',
+      overflowX: isMobile ? 'scroll' : 'hidden', // Enable scrolling on x-axis for mobile
       transition: 'opacity 0.5s, transform 0.5s',
       opacity: showPalette ? 1 : 0,
       transform: `translateY(${showPalette ? '0' : '100%'})`,
-      zIndex: 100
+      zIndex: 100,
+       /* Adding CSS to hide scrollbar */
+       scrollbarWidth: 'thin',
+       scrollbarColor: 'transparent transparent',
+       '&::-webkit-scrollbar': {
+         width: '6px', 
+       },
+       '&::-webkit-scrollbar-thumb': {
+         borderRadius: '3px',
+         background: 'transparent',
+       },
     }}>
-      {colorPalette.map(color => (
-        <div key={color} style={{
-          width: isMobile ? '24px' : '40px',  // Adjust for mobile
-          height: isMobile ? '24px' : '40px', // Adjust for mobile
-          borderRadius: '50%',
-          backgroundColor: color,
-          margin: isMobile ? '6px' : '2px',  // Adjust for mobile
-          cursor: 'pointer',
-          transition: 'all 0.2s ease',
-          transform: selectedColor === color ? 'scale(1.2)' : 'scale(1)',
-        }} onClick={() => handleColorSelection(color)}></div>
-      ))}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        padding: isMobile ? '0px 5px' : '0px 0px', // Add padding equal to the margin on the color circles
+      }}>
+        {colorPalette.map(color => (
+          <div key={color} style={{
+            width: isMobile ? '40px' : '40px',  // Adjust for mobile
+            height: isMobile ? '40px' : '40px', // Adjust for mobile
+            borderRadius: '50%',
+            backgroundColor: color,
+            margin: isMobile ? '2px' : '13px',  // Adjust for mobile
+            padding: isMobile? `1px` : `0px`,
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            transform: selectedColor === color ? 'scale(1.2)' : 'scale(1)',
+          }} onClick={() => handleColorSelection(color)}></div>
+        ))}
+      </div>
     </div>
   );
 };
+
+
+
+
+
 
 // Add this PreviewPixel component
 const PreviewPixel = ({ x, y, width, height, fill }) => {
@@ -104,7 +128,7 @@ const ConfirmationButton = ({ visible, onClick, symbol, handleConfirmClick }) =>
 
   const styles = {
     position: 'fixed',
-    bottom: visible ? '120px' : '-60px',
+    bottom: visible ? '15%' : '-60px',
     left: symbol === '✖' ? isMobile ? '40%' : '45%' : isMobile ? '63.5%' : '55%',  // Adjust the positions for mobile
     transform: isMobile 
       ? symbol === '✖' 
