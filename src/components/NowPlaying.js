@@ -5,7 +5,7 @@ import './NowPlaying.css';
 import SpotifyLogo from './icons/spotify.svg';
 
 const fetchToken = async () => {
-  const response = await fetch('http://gabrielramp.pythonanywhere.com/token');
+  const response = await fetch('https://gabrielramp.pythonanywhere.com/token');
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   } else {
