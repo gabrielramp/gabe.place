@@ -1,7 +1,7 @@
 {
   "name": "gabe.place",
   "version": "0.1.0",
-  "homepage": "https://gabrielramp.github.io/",
+  "homepage": "https://gabrielramp.github.io/gabe.place",
   "private": true,
   "proxy": "http://localhost:3001",
   "dependencies": {
