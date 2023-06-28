@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSpring, animated, config } from 'react-spring';
 import './NowPlaying.css';
 import SpotifyLogo from './icons/spotify.svg';
+import SongDetails from './SongDetails'; 
 
 const fetchToken = async () => {
   const response = await fetch('https://gabrielramp.pythonanywhere.com/token');
@@ -37,7 +38,8 @@ function NowPlaying() {
   const [songData, setSongData] = useState(null);
   const [hover, setHover] = useState(false);
   const [songWidth, setSongWidth] = useState(0);
-
+  const [progressMs, setProgressMs] = useState(0);
+  const [durationMs, setDurationMs] = useState(0);
 
   useEffect(() => {
     fetchToken()
@@ -45,13 +47,40 @@ function NowPlaying() {
         fetchCurrentSong(accessToken)
           .then(data => {
             setSongData(data);
+            setProgressMs(data.progress_ms);
+            setDurationMs(data.item.duration_ms);
           })
           .catch(error => console.log(error));
       })
       .catch(error => console.log(error));
   }, []);
 
+  // This useEffect sets up an interval that checks if the song has finished every second
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (songData) {
+        setProgressMs(prevProgressMs => prevProgressMs + 1000);
 
+        if (progressMs >= durationMs) {
+          // If the song has finished, re-fetch the songData
+          fetchToken()
+            .then(accessToken => {
+              fetchCurrentSong(accessToken)
+                .then(data => {
+                  setSongData(data);
+                  setProgressMs(data.progress_ms);
+                  setDurationMs(data.item.duration_ms);
+                })
+                .catch(error => console.log(error));
+            })
+            .catch(error => console.log(error));
+        }
+      }
+    }, 1000);
+
+    // Clean up the interval on unmount
+    return () => clearInterval(intervalId);
+  }, [songData, progressMs, durationMs]);
 
   useEffect(() => {
     //console.log(`NEWSONGWIDTH:   ${songWidth}`)
@@ -136,6 +165,10 @@ function NowPlaying() {
     }
   }, [songText]);
 
+  // In your render method...
+// Calculate the progress as a percentage
+const progressPercent = (progressMs / durationMs) * 100;
+
   return (
     <div
       className={`now-playing ${hover ? 'hovered' : ''}`}
@@ -150,6 +183,7 @@ function NowPlaying() {
             {songText}
           </animated.div>
         </div>
+        <div style={{ width: `${progressPercent}%`, height: '5px', background: 'green' }} />
       </div>
     </div>
   );
