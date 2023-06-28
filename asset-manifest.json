@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/gabe.place/static/css/main.ee33f3c9.css",
-    "main.js": "/gabe.place/static/js/main.cbc43380.js",
-    "static/js/787.8fe59276.chunk.js": "/gabe.place/static/js/787.8fe59276.chunk.js",
-    "static/media/Roboto-Medium.ttf": "/gabe.place/static/media/Roboto-Medium.7c8d04cd831df3033c8a.ttf",
-    "static/media/Roboto-Medium.woff": "/gabe.place/static/media/Roboto-Medium.61c265591865cecb1c3d.woff",
-    "index.html": "/gabe.place/index.html",
-    "static/media/github.svg": "/gabe.place/static/media/github.0b494e85d9e04dc12ddc73937ea54f4b.svg",
-    "static/media/spotify.svg": "/gabe.place/static/media/spotify.8ebd9d76aea153819dd6839bceeb2f18.svg",
-    "static/media/discord.svg": "/gabe.place/static/media/discord.7bf00007cf1220d59ce92e074b5b0287.svg",
-    "static/media/instagram.svg": "/gabe.place/static/media/instagram.f5b52db492a2bceba133f145a62624bf.svg",
-    "static/media/linkedin.svg": "/gabe.place/static/media/linkedin.c11e3e5ef18ede7da382e6c982ab2ee5.svg",
-    "main.ee33f3c9.css.map": "/gabe.place/static/css/main.ee33f3c9.css.map",
-    "main.cbc43380.js.map": "/gabe.place/static/js/main.cbc43380.js.map",
-    "787.8fe59276.chunk.js.map": "/gabe.place/static/js/787.8fe59276.chunk.js.map"
+    "main.css": "/static/css/main.e0b51db9.css",
+    "main.js": "/static/js/main.ff5bd588.js",
+    "static/js/787.8fe59276.chunk.js": "/static/js/787.8fe59276.chunk.js",
+    "static/media/Roboto-Medium.ttf": "/static/media/Roboto-Medium.7c8d04cd831df3033c8a.ttf",
+    "static/media/Roboto-Medium.woff": "/static/media/Roboto-Medium.61c265591865cecb1c3d.woff",
+    "index.html": "/index.html",
+    "static/media/github.svg": "/static/media/github.0b494e85d9e04dc12ddc73937ea54f4b.svg",
+    "static/media/spotify.svg": "/static/media/spotify.8ebd9d76aea153819dd6839bceeb2f18.svg",
+    "static/media/discord.svg": "/static/media/discord.7bf00007cf1220d59ce92e074b5b0287.svg",
+    "static/media/instagram.svg": "/static/media/instagram.f5b52db492a2bceba133f145a62624bf.svg",
+    "static/media/linkedin.svg": "/static/media/linkedin.c11e3e5ef18ede7da382e6c982ab2ee5.svg",
+    "main.e0b51db9.css.map": "/static/css/main.e0b51db9.css.map",
+    "main.ff5bd588.js.map": "/static/js/main.ff5bd588.js.map",
+    "787.8fe59276.chunk.js.map": "/static/js/787.8fe59276.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ee33f3c9.css",
-    "static/js/main.cbc43380.js"
+    "static/css/main.e0b51db9.css",
+    "static/js/main.ff5bd588.js"
   ]
 }
