@@ -1,8 +1,10 @@
 // NowPlaying.js
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { useSpring, animated, config } from 'react-spring';
 import './NowPlaying.css';
 import SpotifyLogo from './icons/spotify.svg';
+import SongDataContext from '../contexts/SongDataContext';
+
 
 const fetchToken = async () => {
   const response = await fetch('https://gabrielramp.pythonanywhere.com/token');
@@ -34,8 +36,7 @@ const fetchCurrentSong = async (accessToken) => {
 }
 
 function NowPlaying() {
-  const [songData, setSongData] = useState(null);
-  const [hover, setHover] = useState(false);
+  const { songData, setSongData, hover, setHover } = useContext(SongDataContext);
   const [songWidth, setSongWidth] = useState(0);
   const [progressMs, setProgressMs] = useState(0);
   const [durationMs, setDurationMs] = useState(0);
@@ -182,11 +183,13 @@ const progressPercent = (progressMs / durationMs) * 100;
             {songText}
           </animated.div>
         </div>
-        <div style={{ width: `${progressPercent}%`, height: '5px', background: 'green' }} />
+        
       </div>
     </div>
   );
 }
+
+//<div style={{ width: `${progressPercent}%`, height: '5px', background: 'green' }} />
 
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));

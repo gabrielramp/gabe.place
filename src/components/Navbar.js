@@ -7,15 +7,16 @@ function Navbar() {
   return (
     <div className="navbar">
       <div className="nav-items-container">
-        <div className="left-nav-items">
+        <div className="nav-items">
           <Link className="nav-item" to="/">/</Link>
           <Link className="nav-item" to="/portfolio">/portfolio</Link>
           <Link className="nav-item" to="/about">/about</Link>
         </div>
+        <div className="nowplaying">
+          <NowPlaying />
+        </div>
       </div>
-      <div className="nowplaying">
-        <NowPlaying />
-      </div>
+      
     </div>
   );
 }

@@ -1,0 +1,80 @@
+.song-details {
+    background: #000a1c;
+    padding: 1em;
+    width: 300px;
+    border-radius: 15px;
+    position: absolute;
+    z-index: 1;
+    overflow: visible;
+    display: flex;
+    margin-top: 5px;
+    transition: opacity 0.3s ease-in-out
+}
+
+.song-details.show {
+    opacity: 1; /* become fully opaque when the 'show' class is added */
+}
+
+.song-details.hide {
+    opacity: 0; /* become fully transparent when the 'hide' class is added */
+}
+
+
+.song-details img {
+    width: 60px;
+    /* Adjust this value as you need */
+    height: 60px;
+    /* Adjust this value as you need */
+    margin-right: 0em;
+}
+
+.song-details .progress-bar-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+}
+
+.song-details .progress-bar {
+    width: 70%;
+    height: 5px;
+    background: #545454;
+    border-radius: 50px;
+    position: relative;
+    margin-top: 8px;
+    margin-left: 8px;
+}
+
+.song-details .progress-barinside {
+    height: 5px;
+    background: green;
+    border-radius: 50px;
+}
+
+.song-details .progresstime {
+    color: #b0b0b0;
+    font-size: 0.8em;
+    margin-left: 8px;
+    justify-content: flex-start;
+}
+
+.song-details .timer:last-child {
+    text-align: left;
+}
+
+.song-details .song-info .songartist {
+    margin-left: 8px;
+}
+
+.song-details p {
+    margin: 0;
+    margin-left: 0.5em;
+}
+
+.song-details .song-info {
+    flex-grow: 1;
+    /* This will make the song-info take the remaining space */
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    justify-content: center;
+}

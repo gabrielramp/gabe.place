@@ -1,43 +1,40 @@
+/* Bar itself */
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   background-color: #000a1c;
+  display: flex;
   padding: 20px 0;
-  position: sticky;
-  top: 0;
   z-index: 1;
+  width:100%;
+  align-content: center;
+  justify-items: center;
+  justify-content: center;
 }
 
+/* Contains the items and spotify feature */
 .nav-items-container {
   display: flex;
   align-items: center;
-  width: 90%;
-  margin: 0 auto;
-  margin-left: 30%;
+  width: 95%;
 }
 
+/* Contains the links */
 .nav-items {
   display: flex;
-  justify-content: center;
-  flex-grow: 1;
+  justify-content: flex-start;
+  flex: 1;
 }
 
+/* Links */
 .nav-item {
   color: white;
   text-decoration: underline;
   padding: 5px;
 }
 
-.spotify-feature {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-}
-
+/* NowPlaying feature */
 .nowplaying {
+  flex: 1;
   display: flex;
+  justify-content: flex-end;
   cursor: pointer;
-  margin-right: 30%;
 }
