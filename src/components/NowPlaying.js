@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSpring, animated, config } from 'react-spring';
 import './NowPlaying.css';
 import SpotifyLogo from './icons/spotify.svg';
-import SongDetails from './SongDetails'; 
 
 const fetchToken = async () => {
   const response = await fetch('https://gabrielramp.pythonanywhere.com/token');
