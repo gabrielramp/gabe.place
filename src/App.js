@@ -11,7 +11,7 @@ function App() {
   const closeModal = () => {
     setModalShow(false);
   };
-  
+
   return (
     <Router>
       <Navbar />

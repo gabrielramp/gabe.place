@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Stage, Layer, Rect } from 'react-konva';
 import Konva from 'konva';
+import { socket } from './socket'
+import axios from 'axios';
+import { a } from 'react-spring';
 
 // Possible colors
 
@@ -155,10 +158,6 @@ const ConfirmationButton = ({ visible, onClick, symbol, handleConfirmClick }) =>
   return <div style={styles} onClick={handleClick}>{symbol}</div>;
 };
 
-
-
-
-
 // Renderign the canvas
 const Canvas = ({ width, height, rows, cols }) => {
   const [isPixelHighlighted, setIsPixelHighlighted] = useState(false);
@@ -174,20 +173,79 @@ const Canvas = ({ width, height, rows, cols }) => {
   const stageRef = useRef();
 
   // Generate stage pixels
-  const [pixels, setPixels] = useState(() => {
-    const pixels = [];
-    for (let i = 0; i < rows; i++) {
-      for (let j = 0; j < cols; j++) {
-        const color = `${colorPalette[(Math.floor(Math.random() * colorPalette.length))]}`;
-        pixels.push({
-          x: j,
-          y: i,
-          color
+  const [pixels, setPixels] = useState([]); // initialize with empty array
+
+  useEffect(() => {
+    // Async function that fetches the initial data
+    console.log(`Sending fetch for board data`);
+    const fetchInitialData = () => {
+      axios.get("https://place-backend.onrender.com/initboard/cells")
+        .then(response => {
+          console.log(`Got the response:` + JSON.stringify(response.data, null, 2));
+          const databasearray = response.data;
+  
+          const pixelArray = databasearray.map(item => ({
+            x: item.x,
+            y: item.y,
+            color: item.color
+          }));
+  
+          setPixels(pixelArray); // Update state
+        })
+        .catch(error => {
+          console.error("Error fetching initial data:", error);
         });
-      }
+    };
+
+    fetchInitialData();
+  }, []);
+  useEffect(() => {
+
+    
+    function onConnect() {
+      console.log("Connected");
     }
-    return pixels;
-  });
+
+    function onDisconnect() {
+        console.log("Disconnected");
+    }
+
+   function onUpdatedCell(data) {
+      console.log(`Cell Received: ${JSON.stringify(data, 2 ,null)}`);
+
+      // Updating the client side after receiving cell from socket
+      // TODO: refactor to re-render single pixel instead of entire
+      setPixels(prevPixels => {
+        const newPixels = [...prevPixels]; 
+        const pixelIndex = newPixels.findIndex(pixel => Number(pixel.x) === data.x && Number(pixel.y) === data.y);
+        if (pixelIndex !== -1) {
+          const newPixel = { ...newPixels[pixelIndex], color: data.color };
+          newPixels[pixelIndex] = newPixel;
+        }
+        return newPixels;
+      });
+      
+   }
+
+    socket.on("updated_cell", onUpdatedCell);
+    socket.on("connect", onConnect)
+    socket.on("disconnect", onDisconnect);
+
+   return () =>  {
+      socket.off("updated_cell", onUpdatedCell);
+      socket.off("connect", onConnect)
+      socket.off("disconnect", onDisconnect);
+   };
+
+  }, []);
+
+  useEffect(() => {
+    console.log('Pixels updated, triggering re-render');
+    setPixels(prevPixels => {
+      return prevPixels;
+    })
+  }, [pixels]);
+
 
   const handleConfirmClick = (symbol) => {
     if (symbol === '✖') {
@@ -197,11 +255,16 @@ const Canvas = ({ width, height, rows, cols }) => {
       // Logic for the '✔' button
       console.log('✔ button clicked');
       // Add your specific behavior for the '✔' button here
-      setPixels(prevPixels => prevPixels.map(pixel => 
-        pixel.x === centerPixel.x && pixel.y === centerPixel.y ? { ...pixel, color: selectedColor } : pixel
-      ));
+      setPixels(prevPixels => {
+        const newPixels = [...prevPixels];
+        const pixelToUpdate = newPixels.find(pixel => Number(pixel.x) === centerPixel.x && Number(pixel.y) === centerPixel.y);
+        if (pixelToUpdate) {
+          pixelToUpdate.color = selectedColor;
+        }
+        return newPixels;
+      });
 
-      // TODO: Update database here with the new color for the pixel at `centerPixel.x` and `centerPixel.y`
+      socket.emit("updateCell", centerPixel.x, centerPixel.y, selectedColor);
 
       handleCancelSelection(); // Reset the selection
     }
@@ -366,9 +429,9 @@ const Canvas = ({ width, height, rows, cols }) => {
 
 
   // Update isPixelHighlighted when centerPixel changes
-  useEffect(() => {
+  /*useEffect(() => {
     setIsPixelHighlighted(centerPixel.x >= 0 && centerPixel.x < cols && centerPixel.y >= 0 && centerPixel.y < rows);
-  }, [centerPixel]);
+  }, [centerPixel]);*/
 
   const calculateInitialPosition = (width, height, rows, cols) => {
     const x = (window.innerWidth - cols * width) / 2;
@@ -379,6 +442,13 @@ const Canvas = ({ width, height, rows, cols }) => {
 
   const initialPosition = calculateInitialPosition(width, height, rows, cols);
 
+  const layerRef = useRef();
+  useEffect(() => {
+    if (layerRef.current) {
+      const context = layerRef.current.getCanvas()._canvas.getContext('2d');
+      context.imageSmoothingEnabled = false;
+    }
+  }, []);
   return (
     <div>
       <Stage
@@ -390,11 +460,14 @@ const Canvas = ({ width, height, rows, cols }) => {
         onDragMove={handleDragMove}
         onWheel={handleWheel}
         ref={stageRef}
+        pixelRatio={1}
       >
-        <Layer>
+        <Layer ref={layerRef}>
           {pixels.map((pixel, index) => 
-            <Pixel key={index} x={pixel.x * width} y={pixel.y * height} width={width+0.5} height={height+0.5} fill={pixel.color} />
+              <Pixel listening={true} key={index} x={pixel.x * width} y={pixel.y * height} width={width+0.4} height={height+0.4} fill={pixel.color} />
           )}
+        </Layer>
+        <Layer>
           {previewColor && <PreviewPixel x={centerPixel.x * width} y={centerPixel.y * height} width={width} height={height} fill={previewColor} />}
           {highlightVisible && <Highlight x={centerPixel.x * width} y={centerPixel.y * height} width={width} height={height} />}
         </Layer>
@@ -405,6 +478,7 @@ const Canvas = ({ width, height, rows, cols }) => {
       <ConfirmationButton visible={showConfirmationButtons} handleConfirmClick={handleConfirmClick} symbol="✔" />
     </div>
   );
+
 };
 
 const App = () => {

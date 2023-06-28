@@ -1,6 +1,7 @@
 .navbar {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  align-items: center;
   background-color: #000a1c;
   padding: 20px 0;
   position: sticky;
@@ -8,8 +9,35 @@
   z-index: 1;
 }
 
+.nav-items-container {
+  display: flex;
+  align-items: center;
+  width: 90%;
+  margin: 0 auto;
+  margin-left: 30%;
+}
+
+.nav-items {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+}
+
 .nav-item {
   color: white;
   text-decoration: underline;
   padding: 5px;
+}
+
+.spotify-feature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.nowplaying {
+  display: flex;
+  cursor: pointer;
+  margin-right: 30%;
 }

@@ -1,0 +1,37 @@
+.now-playing {
+    display: flex;
+    align-items: center;
+    width: 100%; /* add this to ensure the container takes full width */
+    overflow: hidden; /* hides the overflow */
+}
+
+.now-playing .spotify-logo {
+    width: 40px; /* adjust as necessary */
+    height: 40px; /* adjust as necessary */
+    margin-right: 10px;
+    filter: brightness(0.4); /* change the color to black */
+}
+
+.now-playing:hover .spotify-logo {
+    filter: brightness(1); /* change the color to white when hovered */
+}
+
+.now-playing p {
+    color: #808080; /* grey color */
+    margin: 0;
+    white-space: nowrap; /* keeps text on a single line */
+}
+
+.now-playing:hover p {
+    color: #fff; /* change the color to white when hovered */
+}
+
+.now-playing .songname {
+    color: #808080; /* grey color */
+    width: 30;
+    white-space: nowrap; /* keeps text on a single line */
+}
+
+.now-playing:hover .songname {
+    color:#fff;
+}

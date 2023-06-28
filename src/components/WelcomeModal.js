@@ -74,6 +74,15 @@ const WelcomeModal = (props) => {
         <p className="body3" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
           If you're seeing this text, I'm lying. But soon! 
         </p>
+        <p style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
+          I created this feature with my friend <a href="https://github.com/Wenzel-Z" style={{ textDecoration: 'underline', color:'#b0b0b0'}}>Zach</a>, who worked on the database and socket! <br/>
+        </p>
+        <h1 className="header2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
+         🚧 This site is under construction!
+        </h1>
+        <p className="body2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
+          Thanks for checking my site out before I release it! If I gave you the link, you're special to me!
+        </p>
 
       </div>
     </div>
