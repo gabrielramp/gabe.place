@@ -8,9 +8,7 @@ function Navbar() {
     <div className="navbar">
       <div className="nav-items-container">
         <div className="nav-items">
-          <Link className="nav-item" to="/">/</Link>
-          <Link className="nav-item" to="/portfolio">/portfolio</Link>
-          <Link className="nav-item" to="/about">/about</Link>
+
         </div>
         <div className="nowplaying">
           <NowPlaying />
@@ -22,3 +20,8 @@ function Navbar() {
 }
 
 export default Navbar;
+
+/*
+          <Link className="nav-item" to="/">/</Link>
+          <Link className="nav-item" to="/portfolio">/portfolio</Link>
+          <Link className="nav-item" to="/about">/about</Link>*/

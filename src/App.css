@@ -4,3 +4,52 @@
   margin-right: 5px;
   top:10px;
 }
+
+.bm-burger-button {
+  position: fixed;
+  width: 48px;
+  height: 48px;
+  top: 18px;
+  left: 2%;;
+  color: #808080;
+  z-index: 0;
+  max-height: 100vh;
+}
+
+/* Color/shape of burger icon bars on hover*/
+.bm-burger-bars-hover {
+  color: #000a1c;
+  overflow: hidden;
+  max-height: 100vh;
+}
+
+/* General sidebar styles */
+.bm-menu {
+  position:absolute;
+  background: #000a1c;
+  font-size: 1.15em;
+  overflow-y: hidden !important;
+  width: 100%;
+}
+
+/* Wrapper for item list */
+.bm-item-list {
+  color: #b8b7ad;
+  padding: 0.8em;
+  overflow: hidden;
+  max-height: 100vh;
+}
+
+/* Individual item */
+.bm-item {
+  display: inline-block;
+  overflow: hidden;
+  max-height: 100vh;
+}
+
+/* Styling of overlay */
+.bm-overlay {
+  background: rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  max-height: 100vh;
+}

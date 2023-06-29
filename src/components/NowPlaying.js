@@ -61,7 +61,7 @@ function NowPlaying() {
       if (songData) {
         setProgressMs(prevProgressMs => prevProgressMs + 1000);
 
-        if (progressMs >= durationMs) {
+        if (progressMs >= (durationMs - 1000)) {
           // If the song has finished, re-fetch the songData
           fetchToken()
             .then(accessToken => {
@@ -83,12 +83,12 @@ function NowPlaying() {
   }, [songData, progressMs, durationMs]);
 
   useEffect(() => {
-    //console.log(`NEWSONGWIDTH:   ${songWidth}`)
+    console.log(`NEWSONGWIDTH: ${songWidth}`)
     setAnimationProps({
       from: { transform: 'translateX(0%)' },
       to: async (next) => {
         await delay(1000);
-        if (songWidth > 100) {
+        if (songWidth > 125) {
           await next({ transform: `translateX(-${songWidth}px)` });
         }
         else {
@@ -102,7 +102,7 @@ function NowPlaying() {
       loop: true,
       onRest: () => {
         //console.log(`onResting from the second getter`)
-        if (songWidth > 100) {
+        if (songWidth > 125) {
           setAnimationProps({
             from: { transform: 'translateX(0%)' }, to: async (next) => {
               await delay(2000);
@@ -125,7 +125,7 @@ function NowPlaying() {
     loop: true,
     onRest: () => {
       //console.log(`onResting from the first setter`)
-      if (songWidth > 100) {
+      if (songWidth > 125) {
         setAnimationProps({
           from: { transform: 'translateX(0%)' }, to: async (next) => {
             await delay(2000);
@@ -141,7 +141,7 @@ function NowPlaying() {
 
   // Makes sure that the song text is as big as the window or more -- if it isn't, then we don't want the duplicate 'marquee' text to show up, so we don't include it and we don't animate it.
   function checkWidth() {
-    if (songWidth > 100) {
+    if (songWidth > 125) {
       //console.log(`songWidth > 100 in songText`)
       return `${songData.item.name} - ${songData.item.artists[0].name}⠀⠀⠀⠀⠀⠀${songData.item.name} - ${songData.item.artists[0].name}`
     }
@@ -169,13 +169,20 @@ function NowPlaying() {
 // Calculate the progress as a percentage
 const progressPercent = (progressMs / durationMs) * 100;
 
+const openSongLink = (e) => {
+  if (songData.item.external_urls.spotify) {
+    window.open(songData.item.external_urls.spotify, "_blank");
+  }
+}
+
   return (
     <div
       className={`now-playing ${hover ? 'hovered' : ''}`}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
+      onClick={openSongLink}
     >
-      <img src={SpotifyLogo} alt="Spotify Logo" className="spotify-logo" />
+      
       <div>
         <p>Now Playing</p>
         <div className="songname" style={{ fontFamily: 'Roboto-Medium', fontSize: 16, overflow: 'hidden', width: '200px' }}>
@@ -183,8 +190,8 @@ const progressPercent = (progressMs / durationMs) * 100;
             {songText}
           </animated.div>
         </div>
-        
       </div>
+      <img src={SpotifyLogo} alt="Spotify Logo" className="spotify-logo" />
     </div>
   );
 }

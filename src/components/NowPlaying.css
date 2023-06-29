@@ -1,12 +1,15 @@
 .now-playing {
     display: flex;
+    justify-content: center;
 }
 
 .now-playing .spotify-logo {
     width: 40px; /* adjust as necessary */
     height: 40px; /* adjust as necessary */
-    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 2px;
     filter: brightness(0.4); /* change the color to black */
+    justify-self: center;
 }
 
 .now-playing:hover .spotify-logo {
@@ -17,7 +20,7 @@
     color: #808080; /* grey color */
     margin: 0;
     white-space: nowrap; /* keeps text on a single line */
-    align-self: right;
+    text-align: right;
 }
 
 .now-playing:hover p {
@@ -28,7 +31,7 @@
     color: #808080; /* grey color */
     width: 30;
     white-space: nowrap; /* keeps text on a single line */
-    align-self: right;
+    text-align: right;
 }
 
 .now-playing:hover .songname {

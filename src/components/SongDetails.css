@@ -12,11 +12,13 @@
 }
 
 .song-details.show {
-    opacity: 1; /* become fully opaque when the 'show' class is added */
+    opacity: 1;
+    justify-content: center;
 }
 
 .song-details.hide {
-    opacity: 0; /* become fully transparent when the 'hide' class is added */
+    opacity: 0;
+    justify-content: center;
 }
 
 
@@ -26,6 +28,7 @@
     height: 60px;
     /* Adjust this value as you need */
     margin-right: 0em;
+    justify-self: center;
 }
 
 .song-details .progress-bar-container {

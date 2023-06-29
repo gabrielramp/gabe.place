@@ -50,40 +50,45 @@ const WelcomeModal = (props) => {
   return (
     <div className={props.show ? "modal show-modal" : "modal hide-modal"} onClick={closeModal}>
       <div className="modal-content">
-        <div className="social-icons">
-          <SocialIcon icon={LinkedInIcon} link="https://www.linkedin.com" />
-          <SocialIcon icon={GitHubIcon} link="https://github.com/gabrielramp" />
-          <SocialIcon icon={DiscordIcon} link="https://discord.com/" />
-          <SocialIcon icon={InstagramIcon} link="https://www.instagram.com/gabriel.ramp/" />
+        <div className="headerItems">
+          <div className="social-icons">
+            <SocialIcon icon={LinkedInIcon} link="https://www.linkedin.com" />
+            <SocialIcon icon={GitHubIcon} link="https://github.com/gabrielramp" />
+            <SocialIcon icon={DiscordIcon} link="https://discord.com/" />
+            <SocialIcon icon={InstagramIcon} link="https://www.instagram.com/gabriel.ramp/" />
+          </div>
+          <div className="close-button-container">
+            <X className="close-button" onClick={props.close} />
+          </div>
+          <h1 className="header1" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
+            Hey, I'm <span style={{ color: '#0047ab' }}>Gabe</span> 😃
+          </h1>
+          <p className="flavor1" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
+            I'm a ~{calculateAge()} year old software engineer currently based out of Orlando, FL.
+          </p>
         </div>
-        <div className="close-button-container">
-          <X className="close-button" onClick={props.close} />
+        <div className="block2">
+          <h1 className="header2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
+            {currentEmoji} Leave your mark!
+          </h1>
+          <p className="body2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
+            This remake of Reddit's 2017 /r/Place experiment updates real-time for all users on the site, made with React and Konva. 
+          </p>
+          <p className="body3" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
+            If you're seeing this text, I'm lying. But soon! 
+          </p>
+          <p style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
+            I created this feature with my friend <a href="https://github.com/Wenzel-Z" style={{ textDecoration: 'underline', color:'#b0b0b0'}}>Zach</a>, who worked on the database and socket! <br/>
+          </p>
         </div>
-        <h1 className="header1" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-          Hey, I'm <span style={{ color: '#0047ab' }}>Gabe</span> 😃
-        </h1>
-        <p className="flavor1" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-          I'm a ~{calculateAge()} year old software engineer currently based out of Orlando, FL.
-        </p>
-        <h1 className="header2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-          {currentEmoji} Leave your mark!
-        </h1>
-        <p className="body2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-          This remake of Reddit's 2017 /r/Place experiment updates real-time for all users on the site, made with React and Konva. 
-        </p>
-        <p className="body3" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-          If you're seeing this text, I'm lying. But soon! 
-        </p>
-        <p style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-          I created this feature with my friend <a href="https://github.com/Wenzel-Z" style={{ textDecoration: 'underline', color:'#b0b0b0'}}>Zach</a>, who worked on the database and socket! <br/>
-        </p>
-        <h1 className="header2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-         🚧 This site is under construction!
-        </h1>
-        <p className="body2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-          Thanks for checking my site out before I release it! If I gave you the link, you're special to me!
-        </p>
-
+        <div className="block3">
+          <h1 className="header2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
+          🚧 This site is under construction!
+          </h1>
+          <p className="body2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
+            Thanks for checking my site out before I release it! If I gave you the link, you're special to me!
+          </p>
+        </div>
       </div>
     </div>
   );
