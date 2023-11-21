@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Stage, Layer, Rect } from 'react-konva';
 import Konva from 'konva';
-import { socket } from './socket'
 import axios from 'axios';
 import { a } from 'react-spring';
 
@@ -199,45 +198,7 @@ const Canvas = ({ width, height, rows, cols }) => {
 
     fetchInitialData();
   }, []);
-  useEffect(() => {
 
-    
-    function onConnect() {
-      console.log("Connected");
-    }
-
-    function onDisconnect() {
-        console.log("Disconnected");
-    }
-
-   function onUpdatedCell(data) {
-      console.log(`Cell Received: ${JSON.stringify(data, 2 ,null)}`);
-
-      // Updating the client side after receiving cell from socket
-      // TODO: refactor to re-render single pixel instead of entire
-      setPixels(prevPixels => {
-        const newPixels = [...prevPixels]; 
-        const pixelIndex = newPixels.findIndex(pixel => Number(pixel.x) === data.x && Number(pixel.y) === data.y);
-        if (pixelIndex !== -1) {
-          const newPixel = { ...newPixels[pixelIndex], color: data.color };
-          newPixels[pixelIndex] = newPixel;
-        }
-        return newPixels;
-      });
-      
-   }
-
-    socket.on("updated_cell", onUpdatedCell);
-    socket.on("connect", onConnect)
-    socket.on("disconnect", onDisconnect);
-
-   return () =>  {
-      socket.off("updated_cell", onUpdatedCell);
-      socket.off("connect", onConnect)
-      socket.off("disconnect", onDisconnect);
-   };
-
-  }, []);
 
   useEffect(() => {
     console.log('Pixels updated, triggering re-render');
@@ -263,8 +224,6 @@ const Canvas = ({ width, height, rows, cols }) => {
         }
         return newPixels;
       });
-
-      socket.emit("updateCell", centerPixel.x, centerPixel.y, selectedColor);
 
       handleCancelSelection(); // Reset the selection
     }
