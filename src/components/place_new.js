@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as PIXI from 'pixi.js';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:400'); // Adjust URL based on actual server location
 
 const Place = () => {
   const pixiContainer = useRef(null);
@@ -33,7 +36,6 @@ const Place = () => {
     0xffffff  // White
   ];
 
-  // Update the ref whenever selectedColor changes
   useEffect(() => {
     selectedColorRef.current = selectedColor;
   }, [selectedColor]);
@@ -42,106 +44,86 @@ const Place = () => {
     const containerWidth = pixiContainer.current.clientWidth;
     const containerHeight = pixiContainer.current.clientHeight;
 
-    // Create PixiJS Application
     appRef.current = new PIXI.Application({
       width: containerWidth,
       height: containerHeight,
       backgroundColor: 0x1021022,
-      resolution: window.devicePixelRatio || 1, // Support for high-DPI screens
+      resolution: window.devicePixelRatio || 1,
       autoDensity: true,
     });
 
-    // Append PixiJS canvas to container
     pixiContainer.current.appendChild(appRef.current.view);
 
-    // Create a container for zoom/pan
     const container = new PIXI.Container();
     appRef.current.stage.addChild(container);
 
-    // Create the initial grid with random colors
-    for (let y = 0; y < gridSize; y++) {
-      for (let x = 0; x < gridSize; x++) {
-        const pixel = new PIXI.Graphics();
-
-        // Assign a random color to each tile
-        const randomColor = colorPalette[Math.floor(Math.random() * colorPalette.length)];
-        pixel.beginFill(randomColor);
-        pixel.drawRect(0, 0, pixelSize, pixelSize); // Draw rectangle from (0, 0)
-        pixel.endFill();
-
-        // Position the pixel
-        pixel.x = x * pixelSize;
-        pixel.y = y * pixelSize;
-
-        // Make pixel interactive for drawing
-        pixel.interactive = true;
-        pixel.buttonMode = true;
-
-        // Add event listeners for dragging and changing color
-        pixel.on('pointerdown', (event) => onTilePointerDown(event));
-        pixel.on('pointerup', () => onTilePointerUp(pixel)); // Trigger color change only on release
-        pixel.on('pointerupoutside', onDragEnd);
-
-        // Add the pixel graphic to the PixiJS stage
+    // Fetch initial tile data
+    socket.emit('request_tiles');
+    socket.on('tiles', (tiles) => {
+      tiles.forEach(tile => {
+        const pixel = createPixel(tile.x, tile.y, parseInt(tile.color.replace('#', ''), 16));
         container.addChild(pixel);
-      }
-    }
+      });
+    });
 
-    // Center the container in the view initially
+    socket.on('tile_updated', (tile) => {
+      const pixel = createPixel(tile.x, tile.y, parseInt(tile.color.replace('#', ''), 16));
+      container.addChild(pixel);
+    });
+
     centerCanvas(container, containerWidth, containerHeight);
+    setupInteractions(container);
 
-    // Zoom and pan logic
+    return container;
+  };
+
+  const createPixel = (x, y, color) => {
+    const pixel = new PIXI.Graphics();
+    pixel.beginFill(color);
+    pixel.drawRect(0, 0, pixelSize, pixelSize);
+    pixel.endFill();
+    pixel.x = x * pixelSize;
+    pixel.y = y * pixelSize;
+    pixel.interactive = true;
+    pixel.buttonMode = true;
+    pixel.on('pointerdown', (event) => onTilePointerDown(event));
+    pixel.on('pointerup', () => onTilePointerUp(pixel));
+    pixel.on('pointerupoutside', onDragEnd);
+    return pixel;
+  };
+
+  const setupInteractions = (container) => {
     container.interactive = true;
     container.on('pointerdown', onDragStart);
     container.on('pointerup', onDragEnd);
     container.on('pointerupoutside', onDragEnd);
     container.on('pointermove', onDragMove);
-
-    // Listen for the wheel event on the PixiJS view for zooming
     appRef.current.view.addEventListener('wheel', (event) => onZoom(event, container), { passive: false });
-
-    return container;
   };
 
-  // Center the canvas within the available space
   const centerCanvas = (container, containerWidth, containerHeight) => {
     const gridWidth = gridSize * pixelSize;
     const gridHeight = gridSize * pixelSize;
-
-    // Center the grid by adjusting the container's x and y
     container.x = (containerWidth - gridWidth * container.scale.x) / 2;
     container.y = (containerHeight - gridHeight * container.scale.y) / 2;
   };
 
-  // Handle zooming in/out based on mouse wheel scroll
   const onZoom = (event, container) => {
-    event.preventDefault(); // Prevent default scroll behavior
-
-    // Calculate zoom factor
-    const scaleFactor = event.deltaY < 0 ? 1.1 : 0.9; // Zoom in on scroll up, zoom out on scroll down
+    event.preventDefault();
+    const scaleFactor = event.deltaY < 0 ? 1.1 : 0.9;
     const newScale = container.scale.x * scaleFactor;
-
-    // Ensure the zoom level stays within the specified limits
     if (newScale >= minZoom && newScale <= maxZoom) {
-      // Get the mouse position relative to the container
       const mousePos = appRef.current.renderer.plugins.interaction.mouse.global;
-
-      // Zoom in or out centered around the mouse position
       const worldPos = {
         x: (mousePos.x - container.x) / container.scale.x,
         y: (mousePos.y - container.y) / container.scale.y,
       };
-
-      // Update the scale
       container.scale.set(newScale, newScale);
-
-      // Adjust the position so that the point under the mouse stays under the mouse after zoom
       container.x = mousePos.x - worldPos.x * newScale;
       container.y = mousePos.y - worldPos.y * newScale;
     }
   };
 
-  // Handle drag and pan logic with minimum drag distance
   const onDragStart = (event) => {
     dragging = true;
     isDragValid = false;
@@ -157,16 +139,11 @@ const Place = () => {
     if (dragging) {
       const container = appRef.current.stage.children[0];
       const newPosition = event.data.global;
-
-      // Calculate drag distance
       const dragDistanceX = Math.abs(newPosition.x - dragStartX);
       const dragDistanceY = Math.abs(newPosition.y - dragStartY);
-
-      // Only move the canvas if the drag distance exceeds the threshold
       if (dragDistanceX > minDragDistance || dragDistanceY > minDragDistance) {
         isDragValid = true;
       }
-
       if (isDragValid) {
         container.x += newPosition.x - dragStartX;
         container.y += newPosition.y - dragStartY;
@@ -176,47 +153,35 @@ const Place = () => {
     }
   };
 
-  // Handle pointer down on a tile
   const onTilePointerDown = (event) => {
-    // Start the drag process; avoid color change until release
     onDragStart(event);
   };
 
-  // Handle pointer up on a tile
   const onTilePointerUp = (pixel) => {
-    // Only change the color if it wasn't a drag
     if (!isDragValid) {
       pixel.clear();
-      pixel.beginFill(selectedColorRef.current); // Use the selected color ref
-      pixel.drawRect(0, 0, pixelSize, pixelSize); // Redraw the pixel with the new color
+      pixel.beginFill(selectedColorRef.current);
+      pixel.drawRect(0, 0, pixelSize, pixelSize);
       pixel.endFill();
+      // Send update to server
+      socket.emit('update_tile', { x: pixel.x / pixelSize, y: pixel.y / pixelSize, color: `#${selectedColorRef.current.toString(16).padStart(6, '0')}` });
     }
-    // End the drag process
     onDragEnd();
   };
 
-  // Update canvas size on window resize
   const handleResize = () => {
     if (appRef.current) {
       const containerWidth = pixiContainer.current.clientWidth;
       const containerHeight = pixiContainer.current.clientHeight;
       appRef.current.renderer.resize(containerWidth, containerHeight);
-
-      // Update the center tile after resize
       const container = appRef.current.stage.children[0];
       centerCanvas(container, containerWidth, containerHeight);
     }
   };
 
-  // Set up PixiJS and handle resizing
   useEffect(() => {
-    // Initialize the PixiJS app
     const container = initializePixiApp();
-
-    // Add window resize listener
     window.addEventListener('resize', handleResize);
-
-    // Clean up on unmount
     return () => {
       if (appRef.current) {
         appRef.current.destroy(true, { children: true });
@@ -225,7 +190,6 @@ const Place = () => {
     };
   }, []);
 
-  // Render the color palette for user selection
   const renderColorPalette = () => {
     return colorPalette.map((color) => (
       <button
@@ -238,7 +202,7 @@ const Place = () => {
           border: selectedColor === color ? '3px solid black' : '2px solid gray',
           cursor: 'pointer',
           boxShadow: selectedColor === color ? '0px 0px 15px rgba(0, 0, 0, 0.3)' : 'none',
-          transition: 'all 0.2s ease-in-out', // Smooth transition for hover and selection
+          transition: 'all 0.2s ease-in-out',
         }}
         onClick={() => setSelectedColor(color)}
       />
@@ -251,22 +215,21 @@ const Place = () => {
         ref={pixiContainer}
         style={{
           width: '100%',
-          height: 'calc(100vh - 80px)', // Set height to fill the remaining space, ensuring no white bar
+          height: 'calc(100vh - 80px)',
           overflow: 'hidden',
         }}
       />
-      {/* Sleek color palette UI, centered and positioned towards the bottom */}
       <div style={{
         position: 'absolute',
         bottom: '13%',
         left: '50%',
         transform: 'translateX(-50%)',
-        zIndex: 1, // Ensure it appears in the foreground
+        zIndex: 1,
         display: 'flex',
         justifyContent: 'center',
         flexWrap: 'wrap',
         padding: '15px',
-        background: 'rgba(255, 255, 255, 0.95)', // Subtle background to make it pop
+        background: 'rgba(255, 255, 255, 0.95)',
         borderRadius: '15px',
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.15)',
       }}>
