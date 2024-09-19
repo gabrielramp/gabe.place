@@ -53,8 +53,8 @@ const WelcomeModal = (props) => {
       <div className="modal-content">
         <div className="headerItems">
           <div className="social-icons">
-            <SocialIcon icon={LinkedInIcon} link="https://www.linkedin.com/gabrielramp/" />
-            <SocialIcon icon={GitHubIcon} link="https://github.com/gabrielramp" />
+            <SocialIcon icon={LinkedInIcon} link="https://www.linkedin.com/in/gabrielramp/" />
+            <SocialIcon icon={GitHubIcon} link="https://github.com/jetsetworm" />
             <SocialIcon icon={DiscordIcon} link="https://discord.com/" />
             <SocialIcon icon={InstagramIcon} link="https://www.instagram.com/gabriel.ramp/" />
           </div>
