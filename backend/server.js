@@ -9,6 +9,16 @@ const app = express();
 const port = process.env.PORT || 10000;
 const server = http.createServer(app);
 
+app.get('/get_tiles', (req, res) => {
+  db.all("SELECT x, y, color FROM tiles", [], (err, rows) => {
+    if (err) {
+      console.error('Error fetching tiles:', err.message);
+      return res.status(500).json({ error: 'Error fetching tiles' });
+    }
+    res.json(rows);
+  });
+});
+
 // Determine the allowed origins
 const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(",") : ["http://localhost:3000", "https://main.d3n0q2o6zolg3i.amplifyapp.com"];
 
