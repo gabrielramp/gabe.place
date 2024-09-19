@@ -7,6 +7,7 @@ import LinkedInIcon from "./icons/linkedin.svg";
 import GitHubIcon from "./icons/github.svg";
 import DiscordIcon from "./icons/discord.svg";
 import InstagramIcon from "./icons/instagram.svg";
+import { ReactComponent as AppleLogo } from "./icons/Apple_logo_black.svg";
 
 const WelcomeModal = (props) => {
 
@@ -52,7 +53,7 @@ const WelcomeModal = (props) => {
       <div className="modal-content">
         <div className="headerItems">
           <div className="social-icons">
-            <SocialIcon icon={LinkedInIcon} link="https://www.linkedin.com" />
+            <SocialIcon icon={LinkedInIcon} link="https://www.linkedin.com/gabrielramp/" />
             <SocialIcon icon={GitHubIcon} link="https://github.com/gabrielramp" />
             <SocialIcon icon={DiscordIcon} link="https://discord.com/" />
             <SocialIcon icon={InstagramIcon} link="https://www.instagram.com/gabriel.ramp/" />
@@ -66,6 +67,9 @@ const WelcomeModal = (props) => {
           <p className="flavor1" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
             I'm a ~{calculateAge()} year old software engineer currently based out of Orlando, FL.
           </p>
+          <p className="flavor1" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
+            I just finished up contributing to Machine Learning @ <AppleLogo className="apple-logo" /> and am obtaining my Computer Science Bachelor's at UCF in 2025.
+          </p>
         </div>
         <div className="block2">
           <h1 className="header2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
@@ -74,19 +78,19 @@ const WelcomeModal = (props) => {
           <p className="body2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
             This canvas is updated real-time and directly inspired by Reddit's 2017 /r/Place experiment, made with React and PixiJS. 
           </p>
-          <p className="body3" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-            If you're seeing this text, I'm lying. But soon! 
+          <p style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
           </p>
           <p style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-            I created this feature with my friend <a href="https://github.com/Wenzel-Z" style={{ textDecoration: 'underline', color:'#b0b0b0'}}>Zach</a>, who worked on the database and socket! <br/>
+          </p>
+          <p style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
           </p>
         </div>
         <div className="block3">
           <h1 className="header2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-          🚧 Mind the mess!
+          🎵 Peep What I'm Listening To!
           </h1>
           <p className="body2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-            This site is still under construction.
+            Please. I spent way too long on this feature. Live Spotify snooper using Spotify API, React, and CSS. 
           </p>
         </div>
       </div>

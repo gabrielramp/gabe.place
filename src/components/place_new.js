@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as PIXI from 'pixi.js';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:400'); // Adjust URL based on actual server location
+const socket = io('https://gabe-place.onrender.com'); // Adjust URL based on actual server location
 
 const Place = () => {
   const pixiContainer = useRef(null);
@@ -23,17 +23,22 @@ const Place = () => {
 
   // Define the color palette globally
   const colorPalette = [
-    0xff0000, // Red
-    0xff7f00, // Orange
-    0xffff00, // Yellow
-    0x00ff00, // Green
-    0x00ffff, // Cyan
-    0x0000ff, // Blue
-    0x8a2be2, // Violet
-    0xff1493, // Pink
-    0x8b4513, // Brown
+    0xFFFFFF, // White
+    0xC6C6C6, // Grey
+    0x7E7E7E, // Darker Grey
     0x000000, // Black
-    0xffffff  // White
+    0xFF0000, // Red
+    0xFFA500, // Orange
+    0xFFFF00, // Yellow
+    0x008000, // Green
+    0x00FF00, // Lime
+    0x00FFFF, // Cyan
+    0x0000FF, // Blue
+    0x000080, // Navy
+    0x800080, // Purple
+    0xFF00FF, // Magenta
+    0xA52A2A, // Brown
+    0xFFC0CB  // Pink
   ];
 
   useEffect(() => {
@@ -47,7 +52,7 @@ const Place = () => {
     appRef.current = new PIXI.Application({
       width: containerWidth,
       height: containerHeight,
-      backgroundColor: 0x1021022,
+      backgroundColor: 0x101530,
       resolution: window.devicePixelRatio || 1,
       autoDensity: true,
     });
@@ -57,7 +62,6 @@ const Place = () => {
     const container = new PIXI.Container();
     appRef.current.stage.addChild(container);
 
-    // Fetch initial tile data
     socket.emit('request_tiles');
     socket.on('tiles', (tiles) => {
       tiles.forEach(tile => {

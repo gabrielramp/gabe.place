@@ -27,6 +27,13 @@
     overflow: hidden;
   }
   
+  .apple-logo {
+    width: 1em; /* Matches the font size */
+    height: 1em; /* Matches the font size */
+    fill: currentColor; /* Inherits the text color */
+    vertical-align: middle; /* Base alignment */
+    transform: translateY(-0.1em); /* Adjust upward by 0.1em */
+  }  
 
 .modal {
     position: fixed;
