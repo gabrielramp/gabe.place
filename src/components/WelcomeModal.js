@@ -39,7 +39,7 @@ const WelcomeModal = (props) => {
       } else {
         setCurrentEmoji(emojis[currentEmojiIndex + 1]);
       }
-    }, 1000); // Change every second
+    }, 600); // Change every second
 
     // Cleanup function to clear the interval when the component unmounts
     return () => {
@@ -69,10 +69,10 @@ const WelcomeModal = (props) => {
         </div>
         <div className="block2">
           <h1 className="header2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-            {currentEmoji} Leave your mark!
+            {currentEmoji} Place Tiles!
           </h1>
           <p className="body2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-            This remake of Reddit's 2017 /r/Place experiment updates real-time for all users on the site, made with React and Konva. 
+            This canvas is updated real-time and directly inspired by Reddit's 2017 /r/Place experiment, made with React and PixiJS. 
           </p>
           <p className="body3" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
             If you're seeing this text, I'm lying. But soon! 
@@ -83,10 +83,10 @@ const WelcomeModal = (props) => {
         </div>
         <div className="block3">
           <h1 className="header2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-          🚧 This site is under construction!
+          🚧 Mind the mess!
           </h1>
           <p className="body2" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-            Thanks for checking my site out before I release it! If I gave you the link, you're special to me!
+            This site is still under construction.
           </p>
         </div>
       </div>

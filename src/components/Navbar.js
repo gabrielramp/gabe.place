@@ -7,9 +7,8 @@ function Navbar() {
   return (
     <div className="navbar">
       <div className="nav-items-container">
-        <div className="nav-items">
-
-        </div>
+        {/*<div className="nav-items">
+        </div>*/}
         <div className="nowplaying">
           <NowPlaying />
         </div>

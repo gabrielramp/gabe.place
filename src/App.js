@@ -1,13 +1,13 @@
 // App.js
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Place from './components/Place';
+import Place from './components/place_new'; // Ensure this is the PixiJS-based Place component
 import Navbar from './components/Navbar';
 import WelcomeModal from './components/WelcomeModal';
 import SongDetails from './components/SongDetails'; // Import the new SongDetails component
 import SongDataContext from './contexts/SongDataContext'; // Import the SongDataContext
 import React, { useState, useEffect } from "react";
 import './App.css';
-import { pushRotate as Menu } from 'react-burger-menu'
+import { pushRotate as Menu } from 'react-burger-menu';
 import { BiMenu } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 
@@ -25,8 +25,7 @@ function App() {
     if (isMenuOpen) {
       setIsMenuOpen(false);
       document.body.setAttribute("style", "position: fixed;");
-    }
-    else {
+    } else {
       setIsMenuOpen(true);
       document.body.setAttribute("style", "position: static;");
     }
@@ -41,6 +40,7 @@ function App() {
     }
   }, [modalShow, isMenuOpen]);
 
+  // hamburger menu icon in Menu <>             customBurgerIcon={<BiMenu />}
   return (
     <div id="outer-container">
       <WelcomeModal className='bigmodal' show={modalShow} close={closeModal} />
@@ -49,7 +49,6 @@ function App() {
           <Menu
             pageWrapId="page-wrap"
             outerContainerId="outer-container"
-            customBurgerIcon={<BiMenu />}
             onStateChange={toggleScrollable} // Disable scrolling when sidebar menu
           >
             <Link className="nav-item" to="/">/</Link>
@@ -65,8 +64,8 @@ function App() {
             <div className="songpopupcontainer">
               <SongDetails className="songpopup"/>  
             </div>
-            <Route path="/">
-              <Place />
+            <Route exact path="/">
+              <Place />  {/* Render PixiJS-based Place component */}
             </Route>
           </main>
         </Router>

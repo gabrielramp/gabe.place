@@ -184,7 +184,7 @@ const openSongLink = (e) => {
     >
       
       <div>
-        <p>Now Playing</p>
+        <p>Gabe's Listening To</p>
         <div className="songname" style={{ fontFamily: 'Roboto-Medium', fontSize: 16, overflow: 'hidden', width: '200px' }}>
           <animated.div style={animationProps}>
             {songText}
