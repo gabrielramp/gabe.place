@@ -54,9 +54,9 @@ const WelcomeModal = (props) => {
         <div className="headerItems">
           <div className="social-icons">
             <SocialIcon icon={LinkedInIcon} link="https://www.linkedin.com/in/gabrielramp/" />
-            <SocialIcon icon={GitHubIcon} link="https://github.com/jetsetworm" />
+            <SocialIcon icon={GitHubIcon} link="https://github.com/gabrielramp" />
             <SocialIcon icon={DiscordIcon} link="https://discord.com/" />
-            <SocialIcon icon={InstagramIcon} link="https://www.instagram.com/gabriel.ramp/" />
+            <SocialIcon icon={InstagramIcon} link="https://www.instagram.com/jetsetworm/" />
           </div>
           <div className="close-button-container">
             <X className="close-button" onClick={props.close} />
