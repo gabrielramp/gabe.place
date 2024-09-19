@@ -25,12 +25,16 @@ const db = new sqlite3.Database(dbPath, (err) => {
   console.log('Connected to the SQLite database.');
 });
 
-app.use(cors({
-  origin: process.env.CORS_ORIGIN || "*", // Set via environment variables
-  methods: ['GET', 'POST'],
-  credentials: true
-}));
+const corsOptions = {
+    origin: process.env.CORS_ORIGIN || "https://main.d3n0q2o6zolg3i.amplifyapp.com",
+    methods: ['GET', 'POST'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Device-Remember-Token', 'Access-Control-Allow-Origin', 'Origin', 'Accept']
+  };
 
+app.use(cors(corsOptions));
+io = socketIo(server, { cors: corsOptions });
+  
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS tiles (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
