@@ -9,9 +9,27 @@ const app = express();
 const port = process.env.PORT || 10000;
 const server = http.createServer(app);
 
+// Determine the allowed origins
+const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(",") : ["http://localhost:3000", "https://main.d3n0q2o6zolg3i.amplifyapp.com"];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  methods: ['GET', 'POST'],
+  credentials: true, // Reflect the request origin, as defined by the config
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
+
 const io = socketIo(server, {
   cors: {
-    origin: process.env.CORS_ORIGIN || "*", // Set via environment variables
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true
   }
@@ -20,21 +38,12 @@ const io = socketIo(server, {
 const dbPath = process.env.DATABASE_PATH || './canvas.db';
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
-    return console.error('Error connecting to the database:', err.message);
+    console.error('Error connecting to the database:', err.message);
+    return;
   }
   console.log('Connected to the SQLite database.');
 });
 
-const corsOptions = {
-    origin: process.env.CORS_ORIGIN || "https://main.d3n0q2o6zolg3i.amplifyapp.com",
-    methods: ['GET', 'POST'],
-    credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Device-Remember-Token', 'Access-Control-Allow-Origin', 'Origin', 'Accept']
-  };
-
-app.use(cors(corsOptions));
-io = socketIo(server, { cors: corsOptions });
-  
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS tiles (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -58,9 +67,9 @@ io.on('connection', (socket) => {
       if (err) {
         console.error('Error fetching tiles:', err.message);
         socket.emit('error', 'Error fetching tiles');
-      } else {
-        socket.emit('tiles', rows);
+        return;
       }
+      socket.emit('tiles', rows);
     });
   });
 
@@ -70,10 +79,10 @@ io.on('connection', (socket) => {
       if (err) {
         console.error('Error updating tile:', err.message);
         socket.emit('error', 'Error updating tile');
-      } else {
-        console.log(`Tile at (${x},${y}) updated to ${color}`);
-        io.emit('tile_updated', { x, y, color });
+        return;
       }
+      console.log(`Tile at (${x},${y}) updated to ${color}`);
+      io.emit('tile_updated', { x, y, color });
     });
   });
 
