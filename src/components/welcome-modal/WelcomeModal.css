@@ -1,7 +1,7 @@
 @font-face {
     font-family: 'Roboto-Medium';
-    src: url('./fonts/Roboto-Medium.ttf') format('truetype'),
-         url('./fonts/Roboto-Medium.woff') format('woff');
+    src: url('../fonts/Roboto-Medium.ttf') format('truetype'),
+         url('../fonts/Roboto-Medium.woff') format('woff');
   }
 
   .close-button-container {

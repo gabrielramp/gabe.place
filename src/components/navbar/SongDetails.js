@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import SongDataContext from '../contexts/SongDataContext';
+import SongDataContext from '../../contexts/SongDataContext';
 
 import './SongDetails.css'; // Import the new CSS
 
@@ -40,8 +40,6 @@ function SongDetails() {
             <div className="song-info">
                 <p className="songtitle" style={{ color: '#b0b0b0' }}>{songData.item.name}</p>
                 <p className="songartist" style={{ color: '#b0b0b0', fontSize: '0.8em' }}>{songData.item.artists[0].name}</p>
-
-                
                 <div className="progress-bar-container">
                     <div className="progresstime">{currentTime}</div>
                     <div className="progress-bar">

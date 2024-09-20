@@ -1,21 +1,29 @@
-// App.js
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Place from './components/place_new'; // Ensure this is the PixiJS-based Place component
-import Navbar from './components/Navbar';
-import WelcomeModal from './components/WelcomeModal';
-import SongDetails from './components/SongDetails'; // Import the new SongDetails component
+
+// Navbar
+import Navbar from './components/navbar/Navbar';
+
+// Spotify feature
+import SongDetails from './components/navbar/SongDetails'; // Import the new SongDetails component
 import SongDataContext from './contexts/SongDataContext'; // Import the SongDataContext
-import React, { useState, useEffect } from "react";
+
+// WelcomeModal
+import WelcomeModal from './components/welcome-modal/WelcomeModal';
+
+// Place Feature
+import Place from './components/place-feature/place_new'; // Ensure this is the PixiJS-based Place component
+
+// React imports
 import './App.css';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
 import { pushRotate as Menu } from 'react-burger-menu';
-import { BiMenu } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 
 function App() {
   const [modalShow, setModalShow] = useState(true);
-  const [songData, setSongData] = useState(null); // Move songData state here
-  const [hover, setHover] = useState(false); // Move hover state here
-  const [isMenuOpen, setIsMenuOpen] = useState(false); 
+  const [songData, setSongData] = useState(null);
+  const [hover, setHover] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const closeModal = () => {
     setModalShow(false);

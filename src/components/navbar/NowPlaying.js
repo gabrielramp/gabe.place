@@ -1,9 +1,9 @@
 // NowPlaying.js
-import React, { useContext, useState, useEffect, useRef } from 'react';
-import { useSpring, animated, config } from 'react-spring';
+import React, { useContext, useState, useEffect } from 'react';
+import { useSpring, animated } from 'react-spring';
 import './NowPlaying.css';
-import SpotifyLogo from './icons/spotify.svg';
-import SongDataContext from '../contexts/SongDataContext';
+import SpotifyLogo from '../icons/spotify.svg';
+import SongDataContext from '../../contexts/SongDataContext';
 
 
 const fetchToken = async () => {

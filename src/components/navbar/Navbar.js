@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import NowPlaying from './NowPlaying'; // Import the NowPlaying component
 
 import './Navbar.css';
@@ -19,8 +18,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
-/*
-          <Link className="nav-item" to="/">/</Link>
-          <Link className="nav-item" to="/portfolio">/portfolio</Link>
-          <Link className="nav-item" to="/about">/about</Link>*/
