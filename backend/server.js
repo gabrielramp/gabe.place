@@ -29,16 +29,11 @@ const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split("
 ];
 
 const corsOptions = {
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  },
-  methods: ['GET', 'POST'],
-  credentials: true, // Reflect the request origin, as defined by the config
-  allowedHeaders: ['Content-Type', 'Authorization']
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200 // Some legacy browsers (IE11) choke on 204
 };
 
 app.use(cors(corsOptions));
@@ -46,7 +41,7 @@ app.use(cors(corsOptions));
 const io = socketIo(server, {
   cors: {
     origin: allowedOrigins,
-    methods: ["GET", "POST"],
+    methods: ['GET', 'POST', 'OPTIONS'],
     credentials: true
   }
 });
