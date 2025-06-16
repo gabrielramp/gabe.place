@@ -66,6 +66,17 @@ const WifeyWoes = ({ showToast }) => {
     };
   }, []);
 
+  // Add pink background to entire page
+  useEffect(() => {
+    // Add wifey-page class to body for full background coverage
+    document.body.classList.add('wifey-page');
+    
+    // Clean up function to remove class when component unmounts
+    return () => {
+      document.body.classList.remove('wifey-page');
+    };
+  }, []);
+
   // Redirect to home if navigating away while unlocked
   useEffect(() => {
     if (isUnlocked) {
@@ -131,10 +142,6 @@ const WifeyWoes = ({ showToast }) => {
         // reset form
         setDescription('');
         setLevel('I need a kiss on the forehead <3');
-        setDate(() => {
-          const today = new Date();
-          return today.toISOString().split('T')[0];
-        });
       })
       .catch(() => showToast('Failed to submit grievance, please try again.'));
   };

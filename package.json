@@ -4,6 +4,9 @@
   "homepage": "https://gabe.place",
   "private": true,
   "proxy": "http://localhost:3000",
+  "devDependencies": {
+    "shx": "^0.3.4"
+  },
   "dependencies": {
     "@pixi/react": "^7.1.2",
     "@testing-library/jest-dom": "^5.16.5",
@@ -39,6 +42,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
+    "postbuild": "npx shx mkdir -p build/wifeywoes && npx shx cp build/index.html build/wifeywoes/index.html && npx shx cp build/index.html build/wifeywoes.html",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
