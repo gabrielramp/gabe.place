@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/static/css/main.bdab9ac1.css",
+    "main.css": "/static/css/main.dbf0dd72.css",
     "main.js": "/static/js/main.f4cedacd.js",
     "static/js/787.8fe59276.chunk.js": "/static/js/787.8fe59276.chunk.js",
     "static/media/Roboto-Medium.ttf": "/static/media/Roboto-Medium.7c8d04cd831df3033c8a.ttf",
@@ -12,12 +12,12 @@
     "static/media/instagram.svg": "/static/media/instagram.f5b52db492a2bceba133f145a62624bf.svg",
     "static/media/Apple_logo_black.svg": "/static/media/Apple_logo_black.ba159adbf4f541ac1c81d6efb7d5b881.svg",
     "static/media/linkedin.svg": "/static/media/linkedin.c11e3e5ef18ede7da382e6c982ab2ee5.svg",
-    "main.bdab9ac1.css.map": "/static/css/main.bdab9ac1.css.map",
+    "main.dbf0dd72.css.map": "/static/css/main.dbf0dd72.css.map",
     "main.f4cedacd.js.map": "/static/js/main.f4cedacd.js.map",
     "787.8fe59276.chunk.js.map": "/static/js/787.8fe59276.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.bdab9ac1.css",
+    "static/css/main.dbf0dd72.css",
     "static/js/main.f4cedacd.js"
   ]
 }
