@@ -22,7 +22,11 @@ app.get('/get_tiles', (req, res) => {
 });
 
 // Determine the allowed origins
-const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(",") : ["http://localhost:3000", "https://main.d3n0q2o6zolg3i.amplifyapp.com"];
+const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(",") : [
+  "http://localhost:3000",
+  "https://gabe.place",
+  "https://www.gabe.place"
+];
 
 const corsOptions = {
   origin: (origin, callback) => {
