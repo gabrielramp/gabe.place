@@ -1,0 +1,244 @@
+.wifey-woes-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffd1dc; /* Light pink background */
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.wifey-woes-container h1 {
+  color: #d63384;
+  margin-bottom: 30px;
+  font-family: 'Arial', sans-serif;
+  white-space: nowrap; /* prevent line break */
+  font-size: clamp(20px, 5.5vw, 40px); /* scale with viewport */
+}
+
+.code-inputs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.code-input {
+  width: 40px;
+  height: 60px;
+  text-align: center;
+  font-size: 24px;
+  border: 2px solid #d63384;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.code-input:focus {
+  border-color: #ff69b4;
+  box-shadow: 0 0 5px #ff69b4;
+}
+
+.wifey-woes-container .hint {
+  color: #d63384;
+  font-style: italic;
+  margin-top: 10px;
+}
+
+.space-indicator::placeholder {
+  color: transparent;
+}
+
+.grievance-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 88%;
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 20px 25px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,.1);
+}
+
+.grievance-form label {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-weight: 600;
+  color: #d63384;
+}
+
+.grievance-form input,
+.grievance-form textarea,
+.grievance-form select {
+  margin-top: 6px;
+  padding: 8px 10px;
+  border: 1px solid #d63384;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.grievance-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.grievance-form button {
+  margin-top: 10px;
+  background-color: #d63384;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.grievance-form button:hover {
+  background-color: #b11e6d;
+}
+
+.gap-right {
+  margin-right: 35px; /* bigger gap to imply space */
+}
+
+.lock-screen {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s ease;
+  transform: translateY(-4vh); /* lift slightly upward */
+}
+
+.fade-out {
+  opacity: 0;
+}
+
+.confirm-btn {
+  margin-top: 15px;
+  background-color: #d63384;
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.confirm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.confirm-btn:hover:not(:disabled) {
+  background-color: #b11e6d;
+}
+
+.blossom-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.blossom {
+  position: absolute;
+  top: -10%;
+  animation-name: fall;
+  animation-timing-function: linear;
+  color: #ff96c8;
+  opacity: 0.9;
+  pointer-events: none;
+  animation-iteration-count: infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .code-input {
+    width: 35px;
+    height: 45px;
+    font-size: 20px;
+  }
+  
+  .code-inputs {
+    gap: 6px;
+    transform: scale(0.9);
+    transform-origin: center;
+  }
+  
+  .gap-right {
+    margin-right: 14px;
+  }
+}
+
+/* Mobile transparency */
+@media (max-width: 480px) {
+  .grievance-bg .grievance-form {
+    background: rgba(255, 255, 255, 0.6);
+  }
+}
+
+/* Toast styles */
+.toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d63384;
+  color: #fff;
+  padding: 18px 32px;
+  border-radius: 16px;
+  font-size: 18px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.25);
+  text-align: center;
+  z-index: 10000;
+  pointer-events: none;
+  animation: toastFade 7s ease forwards;
+}
+
+@keyframes toastFade {
+  0%   { opacity: 0;   transform: translate(-50%, -40%) scale(0.9); }
+  10%  { opacity: 1;   transform: translate(-50%, -50%) scale(1);   }
+  95%  { opacity: 1;   transform: translate(-50%, -50%) scale(1);   }
+  100% { opacity: 0;   transform: translate(-50%, -60%) scale(0.9); }
+}
+
+/* Form fade-out */
+.fade-out-form {
+  animation: formFade 0.8s forwards;
+  pointer-events: none;
+}
+
+@keyframes formFade {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* Toast mobile adjustments */
+@media (max-width: 480px) {
+  .toast {
+    width: 85%;
+    font-size: 15px;
+    padding: 14px 20px;
+  }
+}

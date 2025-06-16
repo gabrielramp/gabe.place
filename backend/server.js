@@ -4,8 +4,10 @@ const http = require('http');
 const socketIo = require('socket.io');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 
 const app = express();
+app.use(express.json());
 const port = process.env.PORT || 10000;
 const server = http.createServer(app);
 
@@ -67,6 +69,51 @@ db.serialize(() => {
       console.log("Table is ready or already exists.");
     }
   });
+});
+
+// Configure nodemailer transporter (using SMTP env vars)
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT || 587,
+  secure: process.env.SMTP_SECURE === 'true',
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
+
+app.post('/postwifeywoe', async (req, res) => {
+  const { date, level, description } = req.body;
+
+  if (!description) {
+    return res.status(400).json({ error: 'Description required' });
+  }
+
+  // Log incoming data
+  console.log('WifeyWoe received:', { date, level, description });
+
+  const mailOptions = {
+    from: process.env.EMAIL_FROM || 'no-reply@gabe.place',
+    to: 'gabriel.ramp@hotmail.com',
+    subject: `New WifeyWoe – ${level}`,
+    text: `Date: ${date}\nLevel: ${level}\n\n${description}`,
+  };
+
+  // Log mail options (without revealing password)
+  console.log('Attempting to send email with options:', {
+    to: mailOptions.to,
+    subject: mailOptions.subject,
+    text: mailOptions.text,
+  });
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Email sent successfully.');
+    return res.json({ success: true });
+  } catch (err) {
+    console.error('Error sending grievance email:', err);
+    return res.status(500).json({ error: 'Failed to send email' });
+  }
 });
 
 io.on('connection', (socket) => {
