@@ -3,16 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <title>Redirecting…</title>
-    <meta http-equiv="refresh" content="0; URL=./" />
+    
     <script>
       // GitHub Pages 404 fallback for React Router SPA
       // Builds a hash-based redirect so the React app can handle the route.
       (function() {
-        var pathname = window.location.pathname;
-        // Remove leading slash
-        if (pathname.startsWith('/')) pathname = pathname.slice(1);
-        var newUrl = window.location.origin + '/#/' + pathname + window.location.search + window.location.hash;
-        window.location.replace(newUrl);
+        fetch('/index.html')
+          .then(function(resp){ return resp.text(); })
+          .then(function(html){
+            document.open();
+            document.write(html);
+            document.close();
+          });
       })();
     </script>
   </head>
