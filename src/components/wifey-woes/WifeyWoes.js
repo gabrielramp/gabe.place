@@ -115,7 +115,7 @@ const WifeyWoes = ({ showToast }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const apiBase = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:10000';
+    const apiBase = process.env.REACT_APP_API_BASE || (process.env.NODE_ENV === 'production' ? 'https://gabe-place.onrender.com' : 'http://localhost:10000');
     fetch(`${apiBase}/postwifeywoe`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
