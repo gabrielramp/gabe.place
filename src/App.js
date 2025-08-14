@@ -10,6 +10,8 @@ import WelcomeModal from './components/welcome-modal/WelcomeModal';
 
 // WifeyWoes
 import WifeyWoes from './components/wifey-woes/WifeyWoes';
+// Sudoku
+import Sudoku from './components/sudoku/Sudoku';
 
 // Place Feature
 import Place from './components/place-feature/place_new'; // Ensure this is the PixiJS-based Place component
@@ -35,6 +37,8 @@ function App() {
   }, []);
 
   const isWifeyRoute = window.location.pathname.startsWith('/wifeywoes');
+  const isSudokuRoute = window.location.pathname.startsWith('/sudoku');
+  const isSpecialRoute = isWifeyRoute || isSudokuRoute;
 
   const closeModal = () => {
     setModalShow(false);
@@ -65,12 +69,12 @@ function App() {
   return (
     <div id="outer-container">
       {toastMsg && <div className="toast">{toastMsg}</div>}
-      { !isWifeyRoute && (
+      { !isSpecialRoute && (
         <WelcomeModal className='bigmodal' show={modalShow} close={closeModal} />
       )}
       <SongDataContext.Provider value={{ songData, setSongData, hover, setHover }}> {/* Provide the context */}
         <Router>
-          { !isWifeyRoute && (
+          { !isSpecialRoute && (
             <Menu
               pageWrapId="page-wrap"
               outerContainerId="outer-container"
@@ -86,7 +90,7 @@ function App() {
             id="page-wrap"
             className={isMenuOpen ? 'menu-open' : ''} // Add menu-open class when menu is open
           >
-            { !isWifeyRoute && (
+            { !isSpecialRoute && (
               <>
                 <Navbar />
                 <div className="songpopupcontainer">
@@ -97,6 +101,9 @@ function App() {
             <Switch>
               <Route exact path="/">
                 <Place />
+              </Route>
+              <Route path="/sudoku">
+                <Sudoku />
               </Route>
               <Route path="/wifeywoes">
                 <WifeyWoes showToast={showToast} />
