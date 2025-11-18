@@ -65,10 +65,11 @@ const WelcomeModal = (props) => {
             Hey, I'm <span style={{ color: '#0047ab' }}>Gabe</span> 😃
           </h1>
           <p className="flavor1" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-            I'm a ~{calculateAge()} year old software engineer currently based out of Orlando, FL.
+            I'm a ~{calculateAge()} year old software engineer currently based out of Baltimore, MD.
           </p>
           <p className="flavor1" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-            I just finished up contributing to Machine Learning @ <AppleLogo className="apple-logo" /> and am obtaining my Computer Science Bachelor's at UCF in 2025.
+            I just obtained my B.S. Comp Sci from UCF! I'm currently driving impact @ Abbott.
+             I previously solved problems at <AppleLogo className="apple-logo" /> and Cisco.
           </p>
         </div>
         <div className="block2">

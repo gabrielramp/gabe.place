@@ -28,11 +28,11 @@
   }
   
   .apple-logo {
-    width: 1em; /* Matches the font size */
-    height: 1em; /* Matches the font size */
+    width: 0.95em; /* Matches the font size */
+    height: 0.95em; /* Matches the font size */
     fill: currentColor; /* Inherits the text color */
     vertical-align: middle; /* Base alignment */
-    transform: translateY(-0.1em); /* Adjust upward by 0.1em */
+    transform: translateY(-0.08em); /* Adjust upward by 0.1em */
   }  
 
 .modal {
