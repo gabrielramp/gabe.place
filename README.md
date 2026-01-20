@@ -2,6 +2,46 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Feature: Traffic Kiss Optimizer (/navigate)
+
+A modern maps tool that finds an alternative route that maximizes the number of traffic lights (“kisses”) while keeping ETA close to the fastest route.
+
+### Setup
+
+1) Create a `.env` file at the repo root and add your Google Maps API key:
+
+```
+REACT_APP_GOOGLE_MAPS_API_KEY=YOUR_KEY_HERE
+```
+
+- The repository `.gitignore` ignores `.env`, but if you accidentally committed a key previously, rotate it in Google Cloud and force-remove it from history.
+- Restrict your key to your domains (e.g., `http://localhost:3000`, `https://gabe.place`) and the Maps JavaScript API + Places API.
+
+### Run locally
+
+```
+npm start
+```
+
+Visit `http://localhost:3000/navigate`.
+
+### How it works
+
+- Uses Google DirectionsService with `provideRouteAlternatives` and live traffic.
+- Queries Overpass API for `highway=traffic_signals` within a bounding box around all alternatives.
+- Scores each alternative by the number of nearby lights (within tolerance) with tie-break by least extra time vs the fastest.
+- Caches Overpass responses by bbox and includes fallback Overpass mirrors. Requests are abortable on new searches.
+
+### Accessibility and UX
+
+- Special-route gating hides global chrome on `/navigate` for an immersive map.
+- Reduced-motion support and focus management for the live stats pill.
+- Toasts report background loading/status.
+
+### Deployment (GitHub Pages sub-URL support)
+
+`package.json` postbuild copies `index.html` into `build/navigate/` and `build/navigate.html` so direct linking to `/navigate` works on GitHub Pages.
+
 ## Available Scripts
 
 In the project directory, you can run:

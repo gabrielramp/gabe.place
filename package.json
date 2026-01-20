@@ -42,7 +42,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "postbuild": "npx shx mkdir -p build/wifeywoes && npx shx cp build/index.html build/wifeywoes/index.html && npx shx cp build/index.html build/wifeywoes.html && npx shx mkdir -p build/sudoku && npx shx cp build/index.html build/sudoku/index.html && npx shx cp build/index.html build/sudoku.html",
+    "postbuild": "npx shx mkdir -p build/wifeywoes && npx shx cp build/index.html build/wifeywoes/index.html && npx shx cp build/index.html build/wifeywoes.html && npx shx mkdir -p build/sudoku && npx shx cp build/index.html build/sudoku/index.html && npx shx cp build/index.html build/sudoku.html && npx shx mkdir -p build/navigate && npx shx cp build/index.html build/navigate/index.html && npx shx cp build/index.html build/navigate.html",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {

@@ -7,7 +7,10 @@ import LinkedInIcon from "../icons/linkedin.svg";
 import GitHubIcon from "../icons/github.svg";
 import DiscordIcon from "../icons/discord.svg";
 import InstagramIcon from "../icons/instagram.svg";
+
 import { ReactComponent as AppleLogo } from "../icons/Apple_logo_black.svg";
+import { ReactComponent as CiscoLogo } from "../icons/cisco.svg";
+
 
 const WelcomeModal = (props) => {
 
