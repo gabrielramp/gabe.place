@@ -68,8 +68,13 @@ const WelcomeModal = (props) => {
             I'm a ~{calculateAge()} year old software engineer currently based out of Baltimore, MD.
           </p>
           <p className="flavor1" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
-            I just obtained my B.S. Comp Sci from UCF! I'm currently driving impact @ Abbott.
-             I previously solved problems at <AppleLogo className="apple-logo" /> and Cisco.
+            I just obtained my B.S. Comp Sci from UCF!
+          </p>
+          <p className="flavor1" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
+            I'm currently driving impact @ Abbott. 
+          </p>
+          <p className="flavor1" style={{ fontFamily: 'Roboto-Medium', textAlign: 'left' }}>
+            Previously solved problems at <AppleLogo className="apple-logo" /> and Cisco.
           </p>
         </div>
         <div className="block2">
